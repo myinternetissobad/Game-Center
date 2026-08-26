@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Game Center</title>
+    <meta
+      name="description"
+      content="A colorful browser arcade with a platformer, a right-side tower defense shop, and a zombie shooter."
+    />
+    <link rel="stylesheet" href="repo/styles.css" />
+  </head>
+  <body>
+    <div class="page-glow page-glow-left" aria-hidden="true"></div>
+    <div class="page-glow page-glow-right" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="#top">Game Center</a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="#games">Games</a>
+        <a href="#play">Play</a>
+        <a href="#about">About</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Colorful browser arcade</p>
+          <h1>Game Center</h1>
+          <p class="hero-lead">
+            Three handcrafted browser games with bright art, quick action, and
+            enough detail to feel like a tiny cool-math-style arcade.
+          </p>
+          <div class="hero-actions">
+            <button type="button" class="button button-primary" data-select="platformer">
+              Start with the platformer
+            </button>
+            <a class="button button-secondary" href="#games">Browse the lineup</a>
+          </div>
+          <div class="feature-row" aria-label="Site highlights">
+            <span class="feature-chip">3 playable games</span>
+            <span class="feature-chip">Keyboard + mouse</span>
+            <span class="feature-chip">Built for desktop and mobile</span>
+          </div>
+        </div>
+
+        <div class="hero-gallery" aria-label="Game previews">
+          <article class="hero-card card-platformer">
+            <span class="card-tag">Platformer</span>
+            <h2>Sky Hop Islands</h2>
+            <p>Jump from island to island, collect glowing shells, and reach the coral gate.</p>
+          </article>
+          <article class="hero-card card-tower">
+            <span class="card-tag">Tower Defense</span>
+            <h2>Coral Bastion</h2>
+            <p>Build from a right-side tower shop, place towers anywhere, and hold the path against endless waves.</p>
+          </article>
+          <article class="hero-card card-zombie">
+            <span class="card-tag">Zombie Shooter</span>
+            <h2>Moonlight Outbreak</h2>
+            <p>Move through a neon night, aim with the mouse, and survive the swarm.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="games-section" id="games">
+        <div class="section-heading">
+          <p class="eyebrow">Choose a game</p>
+          <h2>Three worlds, one arcade cabinet.</h2>
+          <p class="section-copy">
+            Pick a game card to jump straight into the action. Every world has
+            its own controls, score state, and visual style.
+          </p>
+        </div>
+
+        <div class="game-grid">
+          <button type="button" class="game-card is-active" data-select="platformer">
+            <div class="card-preview preview-platformer" aria-hidden="true"></div>
+            <div class="card-copy">
+              <p class="card-tag">Platformer Game</p>
+              <h3>Sky Hop Islands</h3>
+              <p>
+                Leap across floating islands, avoid the sea below, and reach
+                the glowing finish gate.
+              </p>
+            </div>
+          </button>
+
+          <button type="button" class="game-card" data-select="tower">
+            <div class="card-preview preview-tower" aria-hidden="true"></div>
+            <div class="card-copy">
+              <p class="card-tag">Tower Defense</p>
+              <h3>Coral Bastion</h3>
+              <p>
+                Browse a Bloons-style shop rail, place towers anywhere on the
+                battlefield, and stop the colorful creeps before they break through.
+              </p>
+            </div>
+          </button>
+
+          <button type="button" class="game-card" data-select="zombie">
+            <div class="card-preview preview-zombie" aria-hidden="true"></div>
+            <div class="card-copy">
+              <p class="card-tag">Zombie Shooter</p>
+              <h3>Moonlight Outbreak</h3>
+              <p>
+                Survive a neon zombie rush with fast movement, quick aim, and
+                a rising survival timer.
+              </p>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <section class="play-section" id="play" data-active-game="platformer">
+        <div class="hud-overlay" aria-label="Game interface">
+          <div class="hud-column hud-column-main">
+            <div class="play-hud">
+              <div class="play-title">
+                <p class="eyebrow">Play area</p>
+                <h2 id="game-title">Sky Hop Islands</h2>
+                <p id="game-summary">
+                  Leap from island to island, collect glowing shells, and reach
+                  the coral gate.
+                </p>
+              </div>
+
+              <div class="mode-tabs" role="tablist" aria-label="Select a game">
+                <button type="button" class="mode-tab is-active" data-select="platformer">
+                  Platformer
+                </button>
+                <button type="button" class="mode-tab" data-select="tower">
+                  Tower Defense
+                </button>
+                <button type="button" class="mode-tab" data-select="zombie">
+                  Zombie Shooter
+                </button>
+              </div>
+            </div>
+
+            <div class="hud-status">
+              <div class="status-pill" id="game-status">
+                Use A/D or the arrow keys to move. Space jumps.
+              </div>
+
+              <div class="stat-strip" aria-label="Game stats">
+                <div class="stat-card">
+                  <span id="stat-label-1">Gems</span>
+                  <strong id="stat-value-1">0</strong>
+                </div>
+                <div class="stat-card">
+                  <span id="stat-label-2">Lives</span>
+                  <strong id="stat-value-2">3</strong>
+                </div>
+                <div class="stat-card">
+                  <span id="stat-label-3">Checkpoint</span>
+                  <strong id="stat-value-3">1</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hud-column hud-column-side">
+            <article class="support-card">
+              <p class="eyebrow">Controls</p>
+              <div class="support-copy" id="controls-copy"></div>
+            </article>
+            <article class="support-card" id="special-panel"></article>
+            <div class="hud-actions">
+              <button type="button" class="button button-secondary hidden" id="secondary-action">
+                Next wave
+              </button>
+              <button type="button" class="button button-primary" id="restart-button">
+                Restart
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="overlay hidden" id="game-overlay" aria-live="polite">
+          <p class="overlay-kicker" id="overlay-kicker">Victory</p>
+          <h3 id="overlay-title">You made it to the end.</h3>
+          <p id="overlay-copy">
+            Use restart to play again or switch to another game.
+          </p>
+          <button type="button" class="button button-primary" id="overlay-restart">
+            Restart
+          </button>
+        </div>
+
+        <div class="play-stage">
+          <div class="canvas-shell">
+            <canvas
+              id="game-canvas"
+              width="1280"
+              height="720"
+              aria-label="Playable game canvas"
+            ></canvas>
+          </div>
+          <aside class="tower-rail hidden" id="tower-shop-panel" aria-label="Tower shop"></aside>
+        </div>
+      </section>
+
+      <section class="about-section" id="about">
+        <div class="section-heading">
+          <p class="eyebrow">About the arcade</p>
+          <h2>Bright, detailed, and built to feel like a tiny browser arcade.</h2>
+          <p class="section-copy">
+            The games are all plain HTML, CSS, and JavaScript, which keeps them
+            fast to load and easy to extend later.
+          </p>
+        </div>
+
+        <div class="info-grid">
+          <article class="info-card">
+            <h3>Platformer</h3>
+            <p>
+              A side-scrolling island run with jumping momentum, collectible
+              gems, and a destination at the far end of the map.
+            </p>
+          </article>
+          <article class="info-card">
+            <h3>Tower defense</h3>
+            <p>
+              A path defense challenge with a right-side tower shop, free
+              placement, and endless waves.
+            </p>
+          </article>
+          <article class="info-card">
+            <h3>Zombie shooter</h3>
+            <p>
+              A survival arena with mouse aim, quick movement, health drops,
+              and a timer that counts down to dawn.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Game Center is a browser arcade built for fast, colorful play.</p>
+      <a href="#top">Back to top</a>
+    </footer>
+
+    <script src="repo/script.js"></script>
+  </body>
+</html>
