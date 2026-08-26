@@ -1,0 +1,2021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Hearthside — A Home Worth Coming Back To</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:wght@300;400&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════
+   TOKENS — Single cohesive palette
+   Inspired by: sea glass, winter linen, morning
+   mist, weathered slate, and pale eucalyptus.
+═══════════════════════════════════════════════ */
+:root {
+  --ink:         #07131d;
+  --bark:        #183047;
+  --umber:       #2e5369;
+  --clay:        #4f8fb0;
+  --clay-mid:    #78afc9;
+  --clay-pale:   #b8d8e5;
+  --sand:        #a8becb;
+  --linen:       #cfdae1;
+  --parchment:   #e2edf2;
+  --cream:       #eff6f9;
+  --fog:         #f7fbfd;
+  --white:       #fbfdff;
+  --sage:        #5f9496;
+  --sage-pale:   #cbe5e4;
+
+  --t-primary: #112334;
+  --t-body:    #435a68;
+  --t-muted:   #748894;
+  --t-faint:   #a8b7c0;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-italic:  'Cormorant Garamond', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+
+  /* Motion — all deliberately slow & calm */
+  --ease:       cubic-bezier(.25,.46,.45,.94);
+  --ease-out:   cubic-bezier(.22,.68,0,1.15);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+  --t1: .3s;   /* fast */
+  --t2: .55s;  /* mid */
+  --t3: .9s;   /* slow */
+  --t4: 1.3s;  /* story */
+
+  --sh-xs: 0 2px 14px rgba(7,19,29,.06);
+  --sh-sm: 0 6px 28px rgba(7,19,29,.10);
+  --sh-md: 0 12px 48px rgba(7,19,29,.14);
+  --sh-lg: 0 24px 72px rgba(7,19,29,.20);
+  --sh-xl: 0 40px 100px rgba(7,19,29,.26);
+
+  --r1:  6px;
+  --r2: 14px;
+  --r3: 24px;
+  --r4: 40px;
+  --r5:999px;
+}
+
+/* ═══ RESET ═══════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font-body);background:var(--white);color:var(--t-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;background:none;font-family:inherit;outline:none}
+ul{list-style:none}
+input{outline:none;font-family:inherit}
+
+/* ═══ CUSTOM CURSOR ═══════════════════════════ */
+*{cursor:none!important}
+#c-dot{
+  position:fixed;top:0;left:0;z-index:99999;pointer-events:none;
+  width:7px;height:7px;background:var(--clay);border-radius:50%;
+  transform:translate(-50%,-50%);
+  transition:width .25s var(--ease-out),height .25s var(--ease-out),background .25s ease;
+  will-change:transform;
+}
+#c-ring{
+  position:fixed;top:0;left:0;z-index:99998;pointer-events:none;
+  width:34px;height:34px;
+  border:1.5px solid rgba(79,143,176,.35);border-radius:50%;
+  transform:translate(-50%,-50%);
+  transition:width .35s var(--ease-out),height .35s var(--ease-out),border-color .25s ease;
+  will-change:transform;
+}
+body.hov #c-dot{width:11px;height:11px;background:var(--clay-mid)}
+body.hov #c-ring{width:48px;height:48px;border-color:rgba(79,143,176,.2)}
+body.click #c-dot{transform:translate(-50%,-50%) scale(.6)}
+
+/* ═══ GRAIN OVERLAY ═══════════════════════════ */
+body::before{
+  content:'';position:fixed;inset:0;z-index:9990;pointer-events:none;
+  opacity:.022;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+
+/* ═══ SCROLL REVEAL ═══════════════════════════ */
+.sr{opacity:0;transition:opacity var(--t4) var(--ease),transform var(--t4) var(--ease)}
+.sr.up   {transform:translateY(36px)}
+.sr.left {transform:translateX(-28px)}
+.sr.right{transform:translateX(28px)}
+.sr.zoom {transform:scale(.95)}
+.sr.in   {opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.22s}
+.d3{transition-delay:.36s}.d4{transition-delay:.52s}
+.d5{transition-delay:.7s} .d6{transition-delay:.9s}
+
+/* ═══ LAYOUT ══════════════════════════════════ */
+.w{max-width:1280px;margin:0 auto;padding:0 52px}
+.wn{max-width:860px;margin:0 auto;padding:0 52px}
+
+/* ═══ TYPE UTILITIES ══════════════════════════ */
+.eyebrow{
+  display:inline-flex;align-items:center;gap:14px;
+  font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;
+  font-weight:400;color:var(--clay);
+}
+.eyebrow::before{content:'';display:block;width:36px;height:1px;background:var(--clay)}
+.serif{font-family:var(--font-display);font-weight:300}
+.italic-serif{font-family:var(--font-italic);font-style:italic;font-weight:300}
+
+/* ═══════════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════════ */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:22px 0;
+  transition:padding var(--t2) var(--ease),background var(--t2) ease,box-shadow var(--t2) ease;
+}
+#nav.scrolled{
+  padding:14px 0;
+  background:rgba(251,253,255,.93);
+  backdrop-filter:blur(20px) saturate(1.5);
+  -webkit-backdrop-filter:blur(20px) saturate(1.5);
+  box-shadow:0 1px 0 rgba(24,48,71,.08);
+}
+.nav-w{display:flex;align-items:center;justify-content:space-between}
+.nav-logo{
+  font-family:var(--font-display);font-size:1.45rem;font-weight:400;
+  color:var(--bark);letter-spacing:.01em;
+}
+.nav-logo i{font-style:italic;color:var(--clay);font-weight:300}
+.nav-links{display:flex;gap:38px}
+.nav-link{
+  font-size:.71rem;letter-spacing:.15em;text-transform:uppercase;font-weight:400;
+  color:var(--t-muted);position:relative;padding-bottom:2px;
+  transition:color var(--t1);
+}
+.nav-link::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:var(--clay);transform:scaleX(0);transform-origin:left;
+  transition:transform var(--t2) var(--ease);
+}
+.nav-link:hover{color:var(--bark)}
+.nav-link:hover::after{transform:scaleX(1)}
+.nav-end{display:flex;align-items:center;gap:6px}
+.nav-ico{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--t-muted);
+  transition:background var(--t1),color var(--t1);
+}
+.nav-ico:hover{background:var(--parchment);color:var(--bark)}
+.cart-btn{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 18px 9px 14px;
+  background:var(--bark);color:var(--cream);
+  border-radius:var(--r5);
+  font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;font-weight:400;
+  transition:background var(--t1),transform var(--t1) var(--ease-out),box-shadow var(--t1);
+}
+.cart-btn:hover{background:var(--clay);transform:translateY(-2px);box-shadow:var(--sh-sm)}
+.cart-n{
+  min-width:19px;height:19px;padding:0 4px;
+  background:rgba(255,255,255,.18);border-radius:10px;
+  font-size:.62rem;display:flex;align-items:center;justify-content:center;
+  transition:background var(--t1),transform var(--t1) var(--ease-spring);
+}
+
+/* ═══════════════════════════════════════════════
+   HERO — Split cinematic layout
+═══════════════════════════════════════════════ */
+#hero{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:52% 48%;
+  position:relative;overflow:hidden;
+}
+/* Left panel */
+.hero-l{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:130px 72px 100px calc(max(52px,(100vw - 1280px)/2 + 52px));
+  background:var(--fog);
+  position:relative;z-index:2;
+}
+.hero-l::after{
+  content:'';position:absolute;right:-80px;top:0;bottom:0;width:160px;
+  background:linear-gradient(to right,var(--fog),transparent);z-index:3;
+}
+.hero-eyebrow{
+  opacity:0;animation:hUp .9s .35s var(--ease) forwards;
+  margin-bottom:32px;
+}
+.hero-h1{
+  font-family:var(--font-display);
+  font-size:clamp(3rem,5.2vw,5.5rem);
+  font-weight:300;line-height:1.06;
+  color:var(--bark);
+  opacity:0;animation:hUp .9s .55s var(--ease) forwards;
+  margin-bottom:28px;
+}
+.hero-h1 em{
+  display:block;font-style:italic;
+  color:var(--clay);font-weight:300;
+}
+.hero-p{
+  font-size:.97rem;color:var(--t-body);line-height:1.85;font-weight:300;
+  max-width:400px;margin-bottom:52px;
+  opacity:0;animation:hUp .9s .75s var(--ease) forwards;
+}
+.hero-actions{
+  display:flex;flex-direction:column;gap:18px;max-width:310px;
+  opacity:0;animation:hUp .9s .95s var(--ease) forwards;
+}
+.btn-primary{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:17px 22px;
+  background:var(--bark);color:var(--cream);
+  border-radius:var(--r2);
+  font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;font-weight:400;
+  transition:background var(--t2),transform var(--t2) var(--ease-out),box-shadow var(--t2);
+}
+.btn-primary .ico{
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,.11);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform var(--t2) var(--ease-out),background var(--t2);
+}
+.btn-primary:hover{background:var(--clay);transform:translateY(-2px);box-shadow:var(--sh-md)}
+.btn-primary:hover .ico{transform:translateX(4px);background:rgba(255,255,255,.18)}
+.btn-ghost{
+  display:flex;align-items:center;gap:10px;
+  font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--t-muted);font-weight:400;
+  padding:2px 0;
+  transition:color var(--t1);
+}
+.btn-ghost svg{transition:transform var(--t2) var(--ease-out)}
+.btn-ghost:hover{color:var(--clay)}
+.btn-ghost:hover svg{transform:translateX(5px)}
+.hero-stats{
+  display:flex;gap:36px;margin-top:60px;padding-top:36px;
+  border-top:1px solid var(--linen);
+  opacity:0;animation:hUp .9s 1.15s var(--ease) forwards;
+}
+.stat-n{
+  font-family:var(--font-display);font-size:1.75rem;font-weight:300;
+  color:var(--bark);line-height:1;
+}
+.stat-l{font-size:.67rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t-faint);margin-top:5px}
+@keyframes hUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+
+/* Hero right — living room illustration */
+.hero-r{position:relative;overflow:hidden;z-index:1}
+.room{
+  position:absolute;inset:0;
+  background:linear-gradient(165deg,#deebf1 0%,#cbdde7 45%,#b7ccd8 100%);
+}
+/* Architectural elements */
+.r-wall{position:absolute;inset:0 0 35% 0;background:linear-gradient(168deg,#edf5f8 0%,#dce8ee 55%,#c6d8e2 100%)}
+.r-floor{position:absolute;inset:65% 0 0 0;background:linear-gradient(to bottom,#b9cbd5,#9fb7c6)}
+.r-base{position:absolute;bottom:35%;left:0;right:0;height:2px;background:rgba(24,48,71,.12)}
+/* Window */
+.r-win{
+  position:absolute;top:7%;right:9%;width:22%;aspect-ratio:.75;
+  background:linear-gradient(160deg,#f7fcff,#d9edf7);
+  border:2px solid rgba(24,48,71,.14);border-radius:2px;
+  box-shadow:inset 0 0 24px rgba(145,205,232,.42),0 4px 16px rgba(24,48,71,.1);
+  overflow:hidden;
+}
+.r-win-cross{
+  position:absolute;inset:0;
+  background:linear-gradient(to right,transparent calc(50% - 1px),rgba(24,48,71,.18) calc(50% - 1px) calc(50% + 1px),transparent calc(50% + 1px)),
+             linear-gradient(to bottom,transparent calc(40% - 1px),rgba(24,48,71,.18) calc(40% - 1px) calc(40% + 1px),transparent calc(40% + 1px));
+}
+.r-win-glow{
+  position:absolute;inset:-40% -30%;
+  background:radial-gradient(ellipse,rgba(155,215,238,.7) 0%,transparent 65%);
+  animation:wglow 5s ease-in-out infinite alternate;
+}
+@keyframes wglow{from{opacity:.7}to{opacity:1}}
+/* Light rays */
+.r-ray{
+  position:absolute;right:20%;top:18%;
+  width:260px;height:340px;
+  background:linear-gradient(130deg,rgba(140,205,232,.14) 0%,transparent 65%);
+  transform-origin:top right;
+  animation:ray 8s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+.r-ray2{
+  position:absolute;right:27%;top:10%;
+  width:180px;height:420px;
+  background:linear-gradient(130deg,rgba(120,190,222,.08) 0%,transparent 55%);
+  transform-origin:top right;
+  animation:ray 11s 1s ease-in-out infinite alternate-reverse;
+  pointer-events:none;
+}
+@keyframes ray{from{transform:rotate(-6deg);opacity:.8}to{transform:rotate(6deg);opacity:1}}
+/* Wall art */
+.r-art{
+  position:absolute;top:8%;left:7%;width:19%;aspect-ratio:.72;
+  background:linear-gradient(145deg,#dce8ee,#cbdce5);
+  border:2px solid rgba(24,48,71,.14);border-radius:2px;
+  box-shadow:4px 5px 18px rgba(7,19,29,.16);
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+}
+.r-art-inner{
+  width:68%;height:68%;
+  background:radial-gradient(ellipse at 35% 60%,rgba(79,143,176,.34) 0%,transparent 55%),
+             radial-gradient(ellipse at 72% 28%,rgba(95,148,150,.34) 0%,transparent 50%),
+             linear-gradient(155deg,#cbdde6,#b8cbd6);
+}
+/* Shelf */
+.r-shelf{
+  position:absolute;top:29%;left:3%;right:54%;
+  height:5px;background:linear-gradient(to bottom,#88a5b6,#6f8fa3);
+  border-radius:2px;box-shadow:0 3px 10px rgba(7,19,29,.2);
+}
+/* Shelf items */
+.r-vase{position:absolute;top:17%;left:8%;transform:translateY(-100%)}
+.r-vase-rim{width:30px;height:5px;background:#8ea9b9;border-radius:2px;margin:0 auto}
+.r-vase-body{
+  width:24px;height:40px;margin:0 auto;
+  background:linear-gradient(to right,#9ab6c5,#bdd1da,#9ab6c5);
+  clip-path:polygon(18% 0%,82% 0%,100% 28%,90% 100%,10% 100%,0% 28%);
+}
+.r-books{position:absolute;top:17%;left:17%;transform:translateY(-100%);display:flex;gap:2px}
+.r-book{border-radius:1px;box-shadow:1px 0 4px rgba(7,19,29,.18)}
+.r-sc{
+  position:absolute;top:17%;left:28%;transform:translateY(-100%);
+  display:flex;flex-direction:column;align-items:center;
+}
+.r-sc-f{
+  width:5px;height:9px;
+  background:linear-gradient(to top,#a8d8f0,#5aa7ca);
+  border-radius:50% 50% 20% 20%;
+  animation:sf 1.9s ease-in-out infinite alternate;
+}
+.r-sc-b{width:10px;height:26px;background:linear-gradient(to right,#f4fbff,#dcebf2);border-radius:1px}
+.r-sc-d{width:16px;height:4px;background:#bdcbd3;border-radius:2px}
+@keyframes sf{
+  0%  {transform:scaleX(1)   scaleY(1)   rotate(-2deg)}
+  40% {transform:scaleX(.82) scaleY(1.14) rotate(2deg)}
+  100%{transform:scaleX(1.12) scaleY(.9) rotate(-1deg)}
+}
+/* Sofa */
+.r-sofa{position:absolute;bottom:31%;left:5%;right:10%;height:27%}
+.r-sofa-back{
+  position:absolute;top:0;left:2%;right:2%;height:56%;
+  background:linear-gradient(to bottom,#8faabd,#7695aa);
+  border-radius:12px 12px 4px 4px;
+  box-shadow:inset 0 -6px 18px rgba(7,19,29,.12);
+}
+.r-sofa-seat{
+  position:absolute;top:45%;left:0;right:0;bottom:0;
+  background:linear-gradient(to bottom,#819fb2,#6f8da2);
+  border-radius:5px 5px 10px 10px;
+  box-shadow:0 8px 20px rgba(7,19,29,.2);
+}
+.r-arm{
+  position:absolute;bottom:16%;height:70%;width:7.5%;
+  border-radius:7px;
+}
+.r-arm.l{left:0;background:linear-gradient(to right,#6f8da2,#84a1b4)}
+.r-arm.r{right:0;background:linear-gradient(to left, #6f8da2,#84a1b4)}
+.r-leg{position:absolute;bottom:-7%;width:2%;height:9%;background:#47677b;border-radius:2px}
+.r-leg.ll{left:5%}.r-leg.rl{right:5%}
+.r-pil{
+  position:absolute;top:4%;height:50%;
+  border-radius:7px;
+  box-shadow:2px 2px 10px rgba(7,19,29,.14);
+}
+.r-pil.a{left:8%;width:21%;background:linear-gradient(135deg,#c7d9e2,#aec4d0);transform:rotate(-3deg)}
+.r-pil.b{left:34%;width:21%;background:linear-gradient(135deg,#d8e7ec,#bdd2db);transform:rotate(2deg)}
+.r-pil.c{right:7%;width:21%;background:linear-gradient(135deg,#b4d3d3,#95bcbe);transform:rotate(-2deg)}
+.r-throw{
+  position:absolute;top:7%;right:9%;width:26%;height:58%;
+  background:linear-gradient(148deg,#bfd2dc,#9fb8c7);
+  border-radius:5px 4px 28px 7px;
+  box-shadow:2px 4px 12px rgba(7,19,29,.14);
+  overflow:hidden;
+}
+.r-throw::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(96deg,transparent 0,transparent 7px,rgba(255,255,255,.07) 7px,rgba(255,255,255,.07) 8px);
+}
+/* Rug */
+.r-rug{
+  position:absolute;bottom:18%;left:1%;right:1%;height:15%;
+  background:radial-gradient(ellipse at 50% 30%,rgba(79,143,176,.24) 0%,transparent 55%),
+             linear-gradient(to bottom,#b5cad5,#91aebe);
+  border-radius:5px 5px 0 0;
+  box-shadow:inset 0 3px 0 rgba(79,143,176,.18),0 3px 0 rgba(7,19,29,.1);
+}
+.r-rug::after{
+  content:'';position:absolute;inset:5px;
+  border:1.5px solid rgba(79,143,176,.15);border-radius:2px;
+}
+/* Floor lamp */
+.r-lamp{
+  position:absolute;bottom:31%;right:5%;width:7.5%;
+  display:flex;flex-direction:column;align-items:center;
+}
+.r-lamp-glow{
+  position:absolute;top:-55%;left:50%;transform:translateX(-50%);
+  width:160px;height:110px;
+  background:radial-gradient(ellipse,rgba(125,200,232,.24) 0%,transparent 70%);
+  animation:lglow 4s ease-in-out infinite alternate;pointer-events:none;
+}
+@keyframes lglow{from{opacity:.7}to{opacity:1}}
+.r-lamp-shade{
+  width:300%;height:0;
+  border-left:28px solid transparent;
+  border-right:28px solid transparent;
+  border-bottom:48px solid #dceaf1;
+  position:relative;
+  filter:drop-shadow(0 0 14px rgba(125,200,232,.45));
+}
+.r-lamp-stem{width:3px;height:95px;background:linear-gradient(to right,#5c788a,#718ea0);border-radius:2px}
+.r-lamp-base{width:190%;height:9px;background:#47677b;border-radius:50%}
+/* Plant */
+.r-plant{position:absolute;bottom:28%;left:0.5%;width:8%}
+.r-pot{width:40px;height:34px;margin:0 auto;background:linear-gradient(to bottom,#8cb5c5,#7199aa);border-radius:3px 3px 7px 7px}
+.r-leaf{
+  position:absolute;border-radius:50% 50% 50% 0;transform-origin:bottom right;
+}
+.r-leaf:nth-child(1){width:44px;height:66px;bottom:32px;left:-14px;background:linear-gradient(145deg,#7fb3ae,#5c918e);transform:rotate(-24deg)}
+.r-leaf:nth-child(2){width:38px;height:58px;bottom:32px;left:-1px; background:linear-gradient(145deg,#72aaa7,#4f8583);transform:rotate(14deg)}
+.r-leaf:nth-child(3){width:42px;height:62px;bottom:30px;left:12px; background:linear-gradient(145deg,#86b5b8,#638f94);transform:rotate(48deg)}
+/* Coffee tray */
+.r-tray{
+  position:absolute;bottom:27%;left:27%;
+  width:18%;height:20px;
+  background:linear-gradient(to bottom,#9eb8c6,#84a2b4);
+  border-radius:5px;box-shadow:0 4px 12px rgba(7,19,29,.2);
+  display:flex;align-items:center;justify-content:center;gap:5px;padding:0 6px;
+}
+.r-tc{width:7px;height:22px;background:#edf6fa;border-radius:1px;margin-top:-11px;position:relative}
+.r-tc::before{
+  content:'';display:block;width:5px;height:7px;
+  background:linear-gradient(to top,#a8d8f0,#5aa7ca);
+  border-radius:50% 50% 20% 20%;margin:0 auto;
+  animation:sf 2.3s ease-in-out infinite alternate;
+}
+.r-to{width:13px;height:13px;background:linear-gradient(135deg,#c5d9e2,#a7beca);border-radius:50%;margin-top:-5px}
+
+/* ═══════════════════════════════════════════════
+   IDENTITY BAND — Scrolling manifesto strip
+═══════════════════════════════════════════════ */
+.id-band{background:var(--bark);overflow:hidden;padding:15px 0}
+.id-track{display:flex;animation:scroll-id 30s linear infinite;width:max-content}
+.id-item{
+  display:flex;align-items:center;gap:18px;padding:0 26px;white-space:nowrap;
+  font-size:.67rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--linen);font-weight:300;
+}
+.id-gem{width:5px;height:5px;background:var(--clay-mid);border-radius:50%}
+@keyframes scroll-id{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ═══════════════════════════════════════════════
+   BRAND PHILOSOPHY — Emotional bridge
+═══════════════════════════════════════════════ */
+#philosophy{padding:120px 0;background:var(--fog)}
+.phil-inner{display:grid;grid-template-columns:1fr 1px 1fr;gap:72px;align-items:center}
+.phil-sep{background:var(--linen);height:80px;margin:auto}
+.phil-left{text-align:right}
+.phil-quote{
+  font-family:var(--font-display);
+  font-size:clamp(1.5rem,2.3vw,2.3rem);
+  font-weight:300;line-height:1.35;color:var(--bark);
+}
+.phil-quote em{display:block;font-style:italic;color:var(--clay);margin-top:6px}
+.phil-right p{
+  font-size:.93rem;color:var(--t-body);line-height:1.9;font-weight:300;
+}
+.phil-right p+p{margin-top:14px}
+
+/* ═══════════════════════════════════════════════
+   MOOD COLLECTIONS
+═══════════════════════════════════════════════ */
+#moods{padding:120px 0;background:var(--cream)}
+.moods-hd{text-align:center;margin-bottom:72px}
+.moods-title{
+  font-family:var(--font-display);
+  font-size:clamp(2rem,3.5vw,3.4rem);
+  font-weight:300;color:var(--bark);margin-top:16px;
+}
+.moods-title em{font-style:italic;color:var(--clay)}
+.moods-sub{
+  font-size:.9rem;color:var(--t-muted);margin-top:14px;
+  max-width:460px;margin-left:auto;margin-right:auto;
+  line-height:1.75;font-weight:300;
+}
+.moods-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.mood-card{
+  border-radius:var(--r3);overflow:hidden;cursor:pointer;
+  position:relative;aspect-ratio:.72;
+  box-shadow:var(--sh-sm);
+  transition:transform var(--t2) var(--ease),box-shadow var(--t2) var(--ease);
+}
+.mood-card:hover{transform:translateY(-10px) scale(1.015);box-shadow:var(--sh-xl)}
+.mood-card-bg{
+  position:absolute;inset:0;
+  transition:transform var(--t3) var(--ease);
+}
+.mood-card:hover .mood-card-bg{transform:scale(1.07)}
+.mood-card-veil{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(7,19,29,.82) 0%,rgba(7,19,29,.16) 55%,transparent 100%);
+}
+.mood-card-body{
+  position:absolute;bottom:0;left:0;right:0;padding:26px 22px;color:white;
+}
+.mood-num{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px;display:block}
+.mood-name{font-family:var(--font-display);font-size:1.46rem;font-weight:300;line-height:1.1;margin-bottom:14px}
+.mood-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(255,255,255,.62);
+  transition:color var(--t1),gap var(--t2) var(--ease);
+}
+.mood-card:hover .mood-cta{color:rgba(255,255,255,1);gap:14px}
+/* Mood-specific visual */
+.m-light .mood-card-bg{
+  background:radial-gradient(ellipse at 40% 30%,rgba(120,190,222,.55) 0%,transparent 55%),
+             linear-gradient(148deg,#123047 0%,#0d2233 60%,#07131d 100%);
+}
+.m-tex .mood-card-bg{background:linear-gradient(148deg,#b6cbd6 0%,#91adbd 40%,#6d8da0 100%)}
+.m-corn .mood-card-bg{
+  background:radial-gradient(ellipse at 65% 80%,rgba(95,148,150,.42) 0%,transparent 55%),
+             linear-gradient(148deg,#eef6f8 0%,#d5e5ec 50%,#bed2dd 100%);
+}
+.m-wall .mood-card-bg{background:linear-gradient(148deg,#dce8ee 0%,#c8d9e2 40%,#b5cad5 100%)}
+
+/* ═══════════════════════════════════════════════
+   SHOP SECTION
+═══════════════════════════════════════════════ */
+#shop{padding:120px 0 140px;background:var(--fog)}
+.shop-header{margin-bottom:60px;display:flex;justify-content:space-between;align-items:flex-end}
+.shop-title-block{}
+.shop-title{
+  font-family:var(--font-display);
+  font-size:clamp(1.8rem,2.8vw,2.9rem);
+  font-weight:300;color:var(--bark);margin-top:12px;
+}
+.shop-title em{font-style:italic;color:var(--clay)}
+.shop-right-controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+/* Filter tabs */
+.f-tab{
+  padding:9px 20px;border-radius:var(--r5);
+  font-size:.69rem;letter-spacing:.13em;text-transform:uppercase;font-weight:400;
+  color:var(--t-muted);
+  border:1.5px solid var(--linen);background:transparent;
+  transition:all var(--t1);
+}
+.f-tab:hover{border-color:var(--clay-mid);color:var(--clay);background:var(--parchment)}
+.f-tab.on{background:var(--bark);color:var(--cream);border-color:var(--bark)}
+/* Search */
+.shop-search{
+  display:flex;align-items:center;gap:10px;
+  background:var(--white);border:1.5px solid var(--linen);
+  border-radius:var(--r5);padding:8px 10px 8px 20px;
+  max-width:420px;margin-bottom:52px;
+  transition:border-color var(--t1),box-shadow var(--t1);
+}
+.shop-search:focus-within{
+  border-color:var(--clay-mid);
+  box-shadow:0 0 0 4px rgba(79,143,176,.11);
+}
+.shop-search input{
+  flex:1;border:none;background:transparent;
+  font-size:.88rem;color:var(--t-primary);font-weight:300;
+}
+.shop-search input::placeholder{color:var(--t-faint)}
+.search-x{
+  width:30px;height:30px;border-radius:50%;
+  background:var(--parchment);color:var(--t-muted);
+  display:flex;align-items:center;justify-content:center;font-size:.75rem;
+  opacity:0;pointer-events:none;transition:opacity var(--t1);
+}
+.search-x.show{opacity:1;pointer-events:all}
+/* Grid */
+#pgrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:26px;
+}
+/* Product card */
+.pc{
+  background:var(--white);border-radius:var(--r3);overflow:hidden;
+  cursor:pointer;position:relative;
+  box-shadow:var(--sh-xs);
+  transition:transform var(--t2) var(--ease),box-shadow var(--t2) var(--ease);
+}
+.pc:hover{transform:translateY(-9px);box-shadow:var(--sh-lg)}
+.pc-img-wrap{position:relative;overflow:hidden;aspect-ratio:4/3.6}
+.pc-img-inner{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform var(--t3) var(--ease);
+}
+.pc:hover .pc-img-inner{transform:scale(1.06)}
+.pc-img-inner img{width:100%;height:100%;object-fit:cover}
+.pc-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:4.2rem}
+/* Overlay CTA */
+.pc-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(7,19,29,.52) 0%,transparent 50%);
+  opacity:0;transition:opacity var(--t2);
+  display:flex;align-items:flex-end;justify-content:center;padding-bottom:22px;
+}
+.pc:hover .pc-overlay{opacity:1}
+.pc-discover{
+  padding:10px 26px;
+  background:var(--fog);color:var(--bark);
+  border-radius:var(--r5);
+  font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-weight:400;
+  transform:translateY(10px) scale(.96);
+  transition:transform var(--t2) var(--ease-out),background var(--t1),box-shadow var(--t1);
+  box-shadow:var(--sh-sm);
+}
+.pc:hover .pc-discover{transform:translateY(0) scale(1)}
+.pc-discover:hover{background:var(--white);box-shadow:var(--sh-md)}
+/* Badge */
+.pc-badge{
+  position:absolute;top:13px;left:13px;
+  padding:4px 13px;border-radius:var(--r5);
+  font-size:.61rem;letter-spacing:.12em;text-transform:uppercase;font-weight:400;
+}
+.pc-badge.new {background:var(--sage-pale);color:var(--sage)}
+.pc-badge.sale{background:var(--clay-mid);color:white}
+/* Wishlist */
+.pc-wish{
+  position:absolute;top:13px;right:13px;
+  width:33px;height:33px;border-radius:50%;
+  background:rgba(253,251,248,.84);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:scale(.7) rotate(-15deg);
+  transition:opacity var(--t1),transform var(--t2) var(--ease-spring),background var(--t1);
+}
+.pc:hover .pc-wish{opacity:1;transform:scale(1) rotate(0)}
+.pc-wish:hover{background:var(--white)}
+.pc-wish.active svg path{fill:var(--clay)}
+/* Info */
+.pc-info{padding:20px 20px 24px}
+.pc-mood{font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;color:var(--t-faint);margin-bottom:7px}
+.pc-name{font-family:var(--font-display);font-size:1.15rem;font-weight:400;color:var(--bark);line-height:1.22;margin-bottom:7px}
+.pc-tagline{font-size:.79rem;color:var(--t-muted);line-height:1.65;font-weight:300;margin-bottom:18px}
+.pc-foot{display:flex;align-items:center;justify-content:space-between}
+.pc-price{font-family:var(--font-display);font-size:1.25rem;font-weight:300;color:var(--bark)}
+.pc-price .was{font-size:.86rem;color:var(--t-faint);text-decoration:line-through;margin-right:5px}
+.pc-add{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--bark);color:var(--cream);
+  display:flex;align-items:center;justify-content:center;
+  transition:background var(--t1),transform var(--t1) var(--ease-spring),box-shadow var(--t1);
+}
+.pc-add:hover{background:var(--clay);transform:scale(1.12);box-shadow:var(--sh-sm)}
+.pc-add.pop{animation:addpop .5s var(--ease-spring)}
+@keyframes addpop{
+  0%  {transform:scale(1)}
+  35% {transform:scale(1.4);background:var(--sage)}
+  70% {transform:scale(.88)}
+  100%{transform:scale(1)}
+}
+/* Skeleton */
+.skel{background:var(--white);border-radius:var(--r3);overflow:hidden;box-shadow:var(--sh-xs)}
+.skel-blk{
+  background:linear-gradient(90deg,var(--cream) 25%,var(--parchment) 50%,var(--cream) 75%);
+  background-size:300% 100%;animation:shim 1.9s infinite;
+}
+@keyframes shim{from{background-position:300% 0}to{background-position:-300% 0}}
+/* Empty */
+.empty{grid-column:1/-1;text-align:center;padding:100px 0}
+.empty-icon{font-size:3.5rem;margin-bottom:20px}
+.empty h3{font-family:var(--font-display);font-size:1.9rem;font-weight:300;color:var(--bark);margin-bottom:10px}
+.empty p{font-size:.88rem;color:var(--t-muted);font-weight:300;margin-bottom:28px}
+.empty-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 28px;background:var(--bark);color:var(--cream);
+  border-radius:var(--r5);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  transition:background var(--t1);
+}
+.empty-btn:hover{background:var(--clay)}
+
+/* ═══════════════════════════════════════════════
+   EDITORIAL STRIP — Dark moonlight section
+═══════════════════════════════════════════════ */
+#editorial{
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:560px;overflow:hidden;
+  background:var(--ink);
+}
+.ed-visual{position:relative;overflow:hidden}
+.ed-scene{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 38% 58%,rgba(79,143,176,.4) 0%,transparent 55%),
+             radial-gradient(ellipse at 72% 24%,rgba(95,148,150,.22) 0%,transparent 45%),
+             linear-gradient(148deg,#10283c 0%,#0b1b2a 50%,#07131d 100%);
+  display:flex;align-items:center;justify-content:center;
+}
+.ed-candles{display:flex;gap:18px;align-items:flex-end}
+.ed-c{display:flex;flex-direction:column;align-items:center}
+.ed-f{
+  border-radius:50% 50% 20% 20%;
+  background:linear-gradient(to top,#a8d8f0,#5aa7ca);
+  animation:edf 2s ease-in-out infinite alternate;
+}
+@keyframes edf{
+  0%  {transform:scaleX(1)   scaleY(1)   rotate(-3deg);opacity:.9}
+  35% {transform:scaleX(.8)  scaleY(1.18) rotate(2deg); opacity:1}
+  70% {transform:scaleX(1.18) scaleY(.88) rotate(-1deg);opacity:.85}
+  100%{transform:scaleX(.88) scaleY(1.1)  rotate(3deg); opacity:.96}
+}
+.ed-body{border-radius:2px;box-shadow:0 0 22px rgba(125,200,232,.16)}
+.ed-glow{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:320px;height:220px;
+  background:radial-gradient(ellipse,rgba(125,200,232,.24) 0%,transparent 70%);
+  pointer-events:none;
+}
+.ed-text{padding:80px;display:flex;flex-direction:column;justify-content:center}
+.ed-quote{
+  font-family:var(--font-display);
+  font-size:clamp(1.75rem,3vw,3.1rem);
+  font-weight:300;line-height:1.2;color:var(--cream);
+  margin:20px 0 26px;
+}
+.ed-quote em{display:block;font-style:italic;color:var(--clay-pale)}
+.ed-body-text{
+  font-size:.87rem;color:rgba(218,206,192,.58);
+  line-height:1.92;font-weight:300;margin-bottom:40px;
+}
+.btn-light{
+  display:inline-flex;align-items:center;gap:10px;
+  align-self:flex-start;
+  padding:13px 30px;
+  border:1.5px solid rgba(255,255,255,.18);color:var(--cream);
+  border-radius:var(--r5);
+  font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;font-weight:400;
+  transition:background var(--t2),border-color var(--t2),gap var(--t2) var(--ease);
+}
+.btn-light:hover{background:var(--clay);border-color:var(--clay);gap:16px}
+
+/* ═══════════════════════════════════════════════
+   THREE BELIEFS — Brand pillars
+═══════════════════════════════════════════════ */
+#beliefs{padding:120px 0;background:var(--cream)}
+.beliefs-hd{text-align:center;margin-bottom:80px}
+.beliefs-title{
+  font-family:var(--font-display);
+  font-size:clamp(1.9rem,3vw,3rem);
+  font-weight:300;color:var(--bark);margin-top:14px;line-height:1.1;
+}
+.beliefs-title em{font-style:italic;color:var(--clay)}
+.beliefs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:52px}
+.belief{}
+.belief-num{
+  font-family:var(--font-display);font-size:3.4rem;font-weight:300;
+  color:var(--linen);line-height:1;margin-bottom:18px;
+}
+.belief-title{
+  font-family:var(--font-display);font-size:1.28rem;font-weight:400;
+  color:var(--bark);margin-bottom:12px;
+}
+.belief-body{font-size:.84rem;color:var(--t-body);line-height:1.88;font-weight:300}
+
+/* ═══════════════════════════════════════════════
+   ASSURANCE BAR — Dark band
+═══════════════════════════════════════════════ */
+#assurance{background:var(--ink);padding:64px 0}
+.assu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px}
+.assu-col{text-align:center}
+.assu-ico{font-size:1.5rem;margin-bottom:14px;opacity:.75}
+.assu-name{
+  font-family:var(--font-display);font-size:1rem;font-weight:300;
+  color:var(--cream);margin-bottom:7px;
+}
+.assu-desc{font-size:.77rem;color:rgba(218,206,192,.4);font-weight:300;line-height:1.65}
+
+/* ═══════════════════════════════════════════════
+   NEWSLETTER
+═══════════════════════════════════════════════ */
+#newsletter{padding:120px 0;background:var(--parchment);position:relative;overflow:hidden}
+#newsletter::before{
+  content:'';position:absolute;right:-4%;top:-30%;
+  width:480px;height:480px;
+  background:radial-gradient(circle,rgba(79,143,176,.12) 0%,transparent 65%);
+  pointer-events:none;
+}
+.nl-inner{max-width:580px;margin:0 auto;text-align:center;position:relative}
+.nl-title{
+  font-family:var(--font-display);
+  font-size:clamp(1.9rem,3.2vw,3.1rem);
+  font-weight:300;color:var(--bark);line-height:1.08;margin:14px 0 14px;
+}
+.nl-title em{font-style:italic;color:var(--clay)}
+.nl-sub{font-size:.9rem;color:var(--t-muted);font-weight:300;line-height:1.75;margin-bottom:40px}
+.nl-form{
+  display:flex;
+  background:var(--white);border:1.5px solid var(--linen);
+  border-radius:var(--r5);padding:6px 6px 6px 26px;
+  box-shadow:var(--sh-sm);
+  transition:border-color var(--t1),box-shadow var(--t1);
+}
+.nl-form:focus-within{border-color:var(--clay-mid);box-shadow:0 0 0 4px rgba(79,143,176,.11),var(--sh-sm)}
+.nl-input{
+  flex:1;border:none;background:transparent;
+  font-family:var(--font-body);font-size:.9rem;font-weight:300;color:var(--t-primary);
+}
+.nl-input::placeholder{color:var(--t-faint)}
+.nl-btn{
+  padding:13px 26px;background:var(--bark);color:var(--cream);
+  border-radius:var(--r5);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:400;transition:background var(--t1);
+}
+.nl-btn:hover{background:var(--clay)}
+.nl-privacy{margin-top:14px;font-size:.69rem;color:var(--t-faint);font-weight:300}
+
+/* ═══════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════ */
+#footer{background:var(--ink);padding:80px 0 44px}
+.footer-grid{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;gap:60px;padding-bottom:64px;border-bottom:1px solid rgba(255,255,255,.055)}
+.f-logo{font-family:var(--font-display);font-size:1.42rem;font-weight:400;color:var(--cream);margin-bottom:14px}
+.f-logo i{font-style:italic;color:var(--clay-mid);font-weight:300}
+.f-copy{font-size:.8rem;color:rgba(218,206,192,.36);font-weight:300;line-height:1.8;margin-bottom:26px}
+.f-socials{display:flex;gap:9px}
+.f-soc{
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,.05);
+  display:flex;align-items:center;justify-content:center;font-size:.83rem;
+  color:rgba(218,206,192,.45);
+  transition:background var(--t1),color var(--t1);
+}
+.f-soc:hover{background:var(--clay);color:white}
+.f-col-head{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(218,206,192,.28);margin-bottom:20px}
+.f-links li{margin-bottom:9px}
+.f-links a{font-size:.8rem;color:rgba(218,206,192,.42);font-weight:300;transition:color var(--t1)}
+.f-links a:hover{color:var(--clay-mid)}
+.footer-bottom{padding-top:30px;display:flex;justify-content:space-between;align-items:center}
+.f-bott-copy{font-size:.7rem;color:rgba(218,206,192,.18);font-weight:300}
+.f-legal{display:flex;gap:20px}
+.f-legal a{font-size:.68rem;color:rgba(218,206,192,.18);font-weight:300;transition:color var(--t1)}
+.f-legal a:hover{color:rgba(218,206,192,.45)}
+
+/* ═══════════════════════════════════════════════
+   PRODUCT MODAL
+═══════════════════════════════════════════════ */
+#modal-bg{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(7,19,29,.7);backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;pointer-events:none;
+  transition:opacity var(--t2);
+}
+#modal-bg.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--fog);border-radius:var(--r4);
+  max-width:960px;width:100%;max-height:92vh;overflow:hidden;
+  display:grid;grid-template-columns:1.15fr 1fr;
+  box-shadow:var(--sh-xl);
+  transform:translateY(28px) scale(.95);
+  transition:transform var(--t2) var(--ease-out);
+  position:relative;
+}
+#modal-bg.open .modal{transform:none}
+.modal-close{
+  position:absolute;top:18px;right:18px;z-index:10;
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(236,228,213,.85);backdrop-filter:blur(6px);
+  color:var(--t-muted);
+  display:flex;align-items:center;justify-content:center;
+  transition:background var(--t1),color var(--t1);
+}
+.modal-close:hover{background:var(--bark);color:var(--cream)}
+.modal-img{
+  overflow:hidden;border-radius:var(--r4) 0 0 var(--r4);
+}
+.modal-scene{
+  width:100%;min-height:520px;height:100%;
+  display:flex;align-items:center;justify-content:center;font-size:7.5rem;
+  transition:transform var(--t3) var(--ease);
+}
+.modal-scene:hover{transform:scale(1.04)}
+.modal-info{padding:50px 42px;overflow-y:auto;display:flex;flex-direction:column}
+.modal-info::-webkit-scrollbar{width:3px}
+.modal-info::-webkit-scrollbar-track{background:transparent}
+.modal-info::-webkit-scrollbar-thumb{background:var(--linen);border-radius:2px}
+.m-mood{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--clay);margin-bottom:8px}
+.m-name{font-family:var(--font-display);font-size:2rem;font-weight:400;color:var(--bark);line-height:1.08;margin-bottom:10px}
+.m-tagline{font-family:var(--font-italic);font-size:1.05rem;color:var(--t-muted);margin-bottom:18px}
+.m-price-row{display:flex;align-items:baseline;gap:9px;margin-bottom:22px}
+.m-price{font-family:var(--font-display);font-size:1.9rem;font-weight:300;color:var(--clay)}
+.m-was{font-size:1.05rem;color:var(--t-faint);text-decoration:line-through}
+.m-rule{height:1px;background:var(--linen);margin:22px 0}
+.m-desc{font-size:.87rem;color:var(--t-body);line-height:1.9;font-weight:300;flex:1}
+.m-attrs{display:flex;flex-direction:column;gap:9px;margin-top:22px}
+.m-attr{display:flex;gap:14px;font-size:.79rem;font-weight:300}
+.m-ak{color:var(--t-faint);min-width:84px;letter-spacing:.04em}
+.m-av{color:var(--t-body)}
+.m-qty-row{display:flex;align-items:center;gap:12px;margin-top:30px}
+.qty-ctrl{
+  display:flex;align-items:center;
+  border:1.5px solid var(--linen);border-radius:var(--r5);overflow:hidden;
+}
+.qty-b{
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  color:var(--t-muted);font-size:1rem;
+  transition:background var(--t1),color var(--t1);
+}
+.qty-b:hover{background:var(--parchment);color:var(--bark)}
+.qty-v{
+  width:40px;text-align:center;font-size:.9rem;color:var(--bark);
+  border-left:1px solid var(--linen);border-right:1px solid var(--linen);
+  line-height:36px;
+}
+.m-add{
+  flex:1;padding:13px;
+  background:var(--bark);color:var(--cream);border-radius:var(--r5);
+  font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;font-weight:400;text-align:center;
+  transition:background var(--t1),transform var(--t1) var(--ease-out),box-shadow var(--t1);
+}
+.m-add:hover{background:var(--clay);transform:translateY(-1px);box-shadow:var(--sh-sm)}
+.m-assure{display:flex;gap:18px;margin-top:18px}
+.m-assure-item{display:flex;align-items:center;gap:5px;font-size:.69rem;color:var(--t-faint);font-weight:300}
+
+/* ═══════════════════════════════════════════════
+   CART DRAWER
+═══════════════════════════════════════════════ */
+#cart-bg{
+  position:fixed;inset:0;z-index:1500;
+  background:rgba(7,19,29,.45);backdrop-filter:blur(4px);
+  opacity:0;pointer-events:none;
+  transition:opacity var(--t2);
+}
+#cart-bg.open{opacity:1;pointer-events:all}
+#cart-drawer{
+  position:fixed;top:0;right:0;bottom:0;z-index:1600;
+  width:430px;background:var(--fog);
+  display:flex;flex-direction:column;
+  transform:translateX(100%);
+  transition:transform var(--t2) var(--ease);
+  box-shadow:-14px 0 70px rgba(7,19,29,.22);
+}
+#cart-drawer.open{transform:translateX(0)}
+.cart-head{
+  padding:26px 30px 20px;
+  border-bottom:1px solid var(--linen);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.cart-head-title{font-family:var(--font-display);font-size:1.65rem;font-weight:300;color:var(--bark)}
+.cart-head-title em{font-style:italic;color:var(--clay)}
+.cart-x{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--parchment);color:var(--t-muted);
+  display:flex;align-items:center;justify-content:center;
+  transition:background var(--t1),color var(--t1);
+}
+.cart-x:hover{background:var(--bark);color:var(--cream)}
+.cart-body{flex:1;overflow-y:auto}
+.cart-body::-webkit-scrollbar{width:3px}
+.cart-body::-webkit-scrollbar-track{background:transparent}
+.cart-body::-webkit-scrollbar-thumb{background:var(--linen);border-radius:2px}
+.cart-empty{
+  height:100%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:12px;
+  color:var(--t-faint);padding:40px;
+}
+.cart-empty-icon{font-size:4rem}
+.cart-empty p{font-size:.88rem;letter-spacing:.03em;text-align:center;line-height:1.6}
+.cart-empty-cta{
+  margin-top:8px;padding:12px 26px;
+  background:var(--bark);color:var(--cream);border-radius:var(--r5);
+  font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+  transition:background var(--t1);
+}
+.cart-empty-cta:hover{background:var(--clay)}
+.cart-item{
+  display:flex;gap:14px;align-items:center;
+  padding:18px 30px;border-bottom:1px solid var(--cream);
+  transition:background var(--t1);
+}
+.cart-item:hover{background:rgba(236,228,213,.4)}
+.cart-thumb{
+  width:68px;height:68px;border-radius:var(--r2);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:2rem;
+  background:var(--parchment);overflow:hidden;
+}
+.cart-info{flex:1;min-width:0}
+.cart-mood{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t-faint);margin-bottom:3px}
+.cart-name{
+  font-family:var(--font-display);font-size:.98rem;font-weight:400;
+  color:var(--bark);margin-bottom:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.cart-price{font-size:.83rem;color:var(--clay)}
+.cart-ctrl-col{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.ci-qty{
+  display:flex;align-items:center;
+  border:1px solid var(--linen);border-radius:var(--r5);overflow:hidden;
+}
+.ciq-b{
+  width:26px;height:26px;display:flex;align-items:center;justify-content:center;
+  color:var(--t-muted);font-size:.85rem;
+  transition:background var(--t1),color var(--t1);
+}
+.ciq-b:hover{background:var(--parchment);color:var(--bark)}
+.ciq-v{
+  width:28px;text-align:center;font-size:.78rem;color:var(--bark);
+  border-left:1px solid var(--linen);border-right:1px solid var(--linen);
+  line-height:26px;
+}
+.ci-rm{
+  width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--t-faint);font-size:.72rem;
+  transition:background var(--t1),color var(--t1);
+}
+.ci-rm:hover{background:#fde8e8;color:#c0392b}
+.cart-foot{padding:22px 30px 34px;border-top:1px solid var(--linen)}
+.cf-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.cf-label{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t-muted)}
+.cf-val{font-family:var(--font-display);font-size:1.65rem;font-weight:300;color:var(--bark)}
+.cf-note{font-size:.7rem;color:var(--t-faint);font-weight:300;margin-bottom:22px}
+.btn-checkout{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:16px;
+  background:var(--bark);color:var(--cream);border-radius:var(--r5);
+  font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;font-weight:400;
+  transition:background var(--t2),transform var(--t1) var(--ease-out),box-shadow var(--t1);
+}
+.btn-checkout:hover{background:var(--clay);transform:translateY(-2px);box-shadow:var(--sh-md)}
+.btn-continue{
+  width:100%;margin-top:11px;padding:11px;text-align:center;
+  font-size:.69rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--t-muted);transition:color var(--t1);
+}
+.btn-continue:hover{color:var(--bark)}
+
+/* ═══ TOAST ═══════════════════════════════════ */
+#toast{
+  position:fixed;bottom:34px;left:50%;z-index:9000;
+  transform:translateX(-50%) translateY(56px) scale(.94);
+  background:var(--bark);color:var(--cream);
+  padding:13px 28px;border-radius:var(--r5);
+  font-size:.79rem;font-weight:300;letter-spacing:.04em;
+  box-shadow:var(--sh-lg);
+  opacity:0;pointer-events:none;
+  transition:transform .5s var(--ease-spring),opacity .4s ease;
+  white-space:nowrap;display:flex;align-items:center;gap:9px;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
+
+/* ═══ RESPONSIVE ══════════════════════════════ */
+@media(max-width:1080px){
+  .w{padding:0 32px}
+  #hero{grid-template-columns:1fr;min-height:auto}
+  .hero-l{padding:120px 32px 72px;padding-left:32px}
+  .hero-l::after{display:none}
+  .hero-r{height:46vh}
+  .phil-inner{grid-template-columns:1fr;gap:36px}
+  .phil-sep{display:none}
+  .phil-left{text-align:left}
+  .moods-grid{grid-template-columns:repeat(2,1fr)}
+  #pgrid{grid-template-columns:repeat(2,1fr)}
+  .modal{grid-template-columns:1fr;max-height:90vh;overflow-y:auto}
+  .modal-img{border-radius:var(--r4) var(--r4) 0 0}
+  .modal-scene{min-height:260px}
+  .beliefs-grid{grid-template-columns:1fr}
+  .assu-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:40px}
+  #editorial{grid-template-columns:1fr}
+  .ed-text{padding:60px 40px}
+  #cart-drawer{width:100%;max-width:420px}
+}
+@media(max-width:640px){
+  .w{padding:0 20px}
+  .nav-links{display:none}
+  #pgrid{grid-template-columns:1fr 1fr;gap:14px}
+  .moods-grid{grid-template-columns:1fr 1fr;gap:14px}
+  .footer-grid{grid-template-columns:1fr}
+  .assu-grid{grid-template-columns:1fr 1fr;gap:24px}
+  .hero-l{padding:90px 20px 60px}
+  .hero-stats{gap:24px}
+  .ed-text{padding:40px 24px}
+  .modal-info{padding:30px 24px}
+}
+</style>
+</head>
+<body>
+<!-- Custom cursor -->
+<div id="c-dot"></div>
+<div id="c-ring"></div>
+
+<!-- ═══════════════════════════════════════════════
+     NAV
+═══════════════════════════════════════════════ -->
+<nav id="nav">
+  <div class="w nav-w">
+    <a href="#hero" class="nav-logo">Hearth<i>side</i></a>
+    <nav class="nav-links" aria-label="Main">
+      <a class="nav-link" href="#moods"     onclick="return sv('moods')">Collections</a>
+      <a class="nav-link" href="#shop"      onclick="return sv('shop')">Shop</a>
+      <a class="nav-link" href="#editorial" onclick="return sv('editorial')">Journal</a>
+      <a class="nav-link" href="#beliefs"   onclick="return sv('beliefs')">Our Story</a>
+    </nav>
+    <div class="nav-end">
+      <button class="nav-ico" onclick="focusSearch()" aria-label="Search">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      </button>
+      <button class="cart-btn" onclick="openCart()" aria-label="Basket">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        Basket
+        <span class="cart-n" id="cart-n">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-l">
+    <div class="hero-eyebrow">
+      <span class="eyebrow">Slow Living · Scandinavian Calm</span>
+    </div>
+    <h1 class="hero-h1">
+      Every room deserves
+      <em>to feel like home.</em>
+    </h1>
+    <p class="hero-p">We find objects with quiet purpose — things that catch soft light, make you want to sit longer, and transform an ordinary evening into something worth savouring.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="sv('shop')">
+        Explore the Collection
+        <span class="ico">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </button>
+      <a class="btn-ghost" href="#moods" onclick="return sv('moods')">
+        Browse by mood
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-n">240+</div><div class="stat-l">Curated pieces</div></div>
+      <div><div class="stat-n">14k</div><div class="stat-l">Calm homes</div></div>
+      <div><div class="stat-n">4.9★</div><div class="stat-l">Avg rating</div></div>
+    </div>
+  </div>
+
+  <!-- Illustrated living room scene -->
+  <div class="hero-r" aria-hidden="true">
+    <div class="room">
+      <div class="r-wall"></div>
+      <div class="r-floor"></div>
+      <div class="r-base"></div>
+      <div class="r-win">
+        <div class="r-win-cross"></div>
+        <div class="r-win-glow"></div>
+      </div>
+      <div class="r-ray"></div>
+      <div class="r-ray2"></div>
+      <div class="r-art"><div class="r-art-inner"></div></div>
+      <div class="r-shelf"></div>
+      <div class="r-vase"><div class="r-vase-rim"></div><div class="r-vase-body"></div></div>
+      <div class="r-books">
+        <div class="r-book" style="width:9px;height:32px;background:#8fb0c0"></div>
+        <div class="r-book" style="width:9px;height:38px;background:#aac7d4"></div>
+        <div class="r-book" style="width:9px;height:28px;background:#7199aa"></div>
+        <div class="r-book" style="width:9px;height:36px;background:#9bb6c4"></div>
+      </div>
+      <div class="r-sc"><div class="r-sc-f"></div><div class="r-sc-b"></div><div class="r-sc-d"></div></div>
+      <div class="r-sofa">
+        <div class="r-sofa-back"></div>
+        <div class="r-sofa-seat"></div>
+        <div class="r-arm l"></div><div class="r-arm r"></div>
+        <div class="r-leg ll"></div><div class="r-leg rl"></div>
+        <div class="r-pil a"></div><div class="r-pil b"></div><div class="r-pil c"></div>
+        <div class="r-throw"></div>
+      </div>
+      <div class="r-rug"></div>
+      <div class="r-lamp">
+        <div class="r-lamp-glow"></div>
+        <div class="r-lamp-shade"></div>
+        <div class="r-lamp-stem"></div>
+        <div class="r-lamp-base"></div>
+      </div>
+      <div class="r-plant">
+        <div class="r-leaf"></div>
+        <div class="r-leaf"></div>
+        <div class="r-leaf"></div>
+        <div class="r-pot"></div>
+      </div>
+      <div class="r-tray">
+        <div class="r-tc"></div>
+        <div class="r-to"></div>
+        <div class="r-tc" style="height:16px;margin-top:-8px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Identity band -->
+<div class="id-band" aria-hidden="true">
+  <div class="id-track" id="id-track"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PHILOSOPHY
+═══════════════════════════════════════════════ -->
+<section id="philosophy">
+  <div class="w">
+    <div class="phil-inner">
+      <div class="phil-left sr left">
+        <p class="phil-quote">
+          A home isn't built from things —<em>it's built from feelings.</em>
+        </p>
+      </div>
+      <div class="phil-sep sr zoom d2"></div>
+      <div class="phil-right sr right d3">
+        <p>We started Hearthside because we believe the objects we live with shape how we feel. A well-placed lamp, a soft rug underfoot, a single candle on the windowsill — these quiet things transform the quality of an ordinary evening.</p>
+        <p>Everything we choose answers a simple question: does it make the room feel clearer, calmer, or more alive? If not, it doesn't belong here.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     MOOD COLLECTIONS
+═══════════════════════════════════════════════ -->
+<section id="moods">
+  <div class="w">
+    <div class="moods-hd">
+      <p class="eyebrow sr">Shop by Feeling</p>
+      <h2 class="moods-title sr d2">Find your room's <em>mood</em></h2>
+      <p class="moods-sub sr d3">Rather than browsing a catalogue, start with how you want your space to feel. Each collection is a carefully considered world — a specific atmosphere to step into.</p>
+    </div>
+    <div class="moods-grid">
+      <div class="mood-card m-light sr d1" onclick="filterMood('Soft Lighting');sv('shop')">
+        <div class="mood-card-bg"></div>
+        <div class="mood-card-veil"></div>
+        <div class="mood-card-body">
+          <span class="mood-num">Collection 01</span>
+          <h3 class="mood-name">Soft Lighting</h3>
+          <span class="mood-cta">Shop this mood <span>→</span></span>
+        </div>
+      </div>
+      <div class="mood-card m-tex sr d2" onclick="filterMood('Cool Textures');sv('shop')">
+        <div class="mood-card-bg"></div>
+        <div class="mood-card-veil"></div>
+        <div class="mood-card-body">
+          <span class="mood-num">Collection 02</span>
+          <h3 class="mood-name">Cool Textures</h3>
+          <span class="mood-cta">Shop this mood <span>→</span></span>
+        </div>
+      </div>
+      <div class="mood-card m-corn sr d3" onclick="filterMood('Calm Corners');sv('shop')">
+        <div class="mood-card-bg"></div>
+        <div class="mood-card-veil"></div>
+        <div class="mood-card-body">
+          <span class="mood-num">Collection 03</span>
+          <h3 class="mood-name">Calm Corners</h3>
+          <span class="mood-cta">Shop this mood <span>→</span></span>
+        </div>
+      </div>
+      <div class="mood-card m-wall sr d4" onclick="filterMood('Wall Atmosphere');sv('shop')">
+        <div class="mood-card-bg"></div>
+        <div class="mood-card-veil"></div>
+        <div class="mood-card-body">
+          <span class="mood-num">Collection 04</span>
+          <h3 class="mood-name">Wall Atmosphere</h3>
+          <span class="mood-cta">Shop this mood <span>→</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SHOP
+═══════════════════════════════════════════════ -->
+<section id="shop">
+  <div class="w">
+    <div class="shop-header">
+      <div class="shop-title-block">
+        <p class="eyebrow sr" id="shop-eyebrow">All Pieces</p>
+        <h2 class="shop-title sr d2">The <em>Collection</em></h2>
+      </div>
+      <div class="shop-right-controls sr d3" id="filter-bar"></div>
+    </div>
+    <div class="shop-search sr d4">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input type="text" id="search-in" placeholder="Search by feeling, material, or object…" oninput="handleSearch(this.value)"/>
+      <button class="search-x" id="search-x" onclick="clearSearch()" aria-label="Clear">✕</button>
+    </div>
+    <div id="pgrid" role="list"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     EDITORIAL — Moonlight section
+═══════════════════════════════════════════════ -->
+<section id="editorial">
+  <div class="ed-visual" aria-hidden="true">
+    <div class="ed-scene">
+      <div class="ed-candles">
+        <div class="ed-c">
+          <div class="ed-f" style="width:10px;height:18px;animation-delay:0s"></div>
+          <div class="ed-body" style="width:18px;height:70px;background:linear-gradient(to right,#f5fbff,#dbeaf2)"></div>
+        </div>
+        <div class="ed-c" style="margin-bottom:22px">
+          <div class="ed-f" style="width:8px;height:13px;animation-delay:.4s"></div>
+          <div class="ed-body" style="width:14px;height:46px;background:linear-gradient(to right,#eef8fc,#d3e5ee)"></div>
+        </div>
+        <div class="ed-c" style="margin-bottom:10px">
+          <div class="ed-f" style="width:6px;height:9px;animation-delay:.9s"></div>
+          <div class="ed-body" style="width:11px;height:30px;background:linear-gradient(to right,#e7f3f8,#cadde7)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ed-glow"></div>
+  </div>
+  <div class="ed-text">
+    <p class="eyebrow sr" style="color:var(--clay-mid)">The Hearthside Journal</p>
+    <blockquote class="ed-quote sr d2">
+      Candles aren't just light —
+      <em>they're permission to slow down.</em>
+    </blockquote>
+    <p class="ed-body-text sr d3">There's a reason every cozy room has a candle burning. It's the signal it sends to your nervous system: the day is softening. You can exhale now. Our collection of hand-poured candles is chosen for exactly that feeling.</p>
+    <button class="btn-light sr d4" onclick="filterMood('Soft Lighting');sv('shop')">
+      Discover Soft Lighting
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     THREE BELIEFS
+═══════════════════════════════════════════════ -->
+<section id="beliefs">
+  <div class="w">
+    <div class="beliefs-hd">
+      <p class="eyebrow sr">How We Think About Home</p>
+      <h2 class="beliefs-title sr d2">Three beliefs that guide<br><em>everything we choose.</em></h2>
+    </div>
+    <div class="beliefs-grid">
+      <div class="belief sr d1">
+        <div class="belief-num">01</div>
+        <h3 class="belief-title">Objects should earn their place</h3>
+        <p class="belief-body">Every piece must answer one question: does it make the room feel clearer, calmer, or more alive? If not, it doesn't belong here. We'd rather carry fifty things beautifully than five hundred things indifferently.</p>
+      </div>
+      <div class="belief sr d2">
+        <div class="belief-num">02</div>
+        <h3 class="belief-title">Quality is felt, not described</h3>
+        <p class="belief-body">We source materials that improve with time — linen that softens with washing, oak that deepens with age, beeswax that burns cleanly. These aren't claims on packaging. They're things you notice after a year of living with them.</p>
+      </div>
+      <div class="belief sr d3">
+        <div class="belief-num">03</div>
+        <h3 class="belief-title">Home is the most important room</h3>
+        <p class="belief-body">We live in an age that glorifies being out, busy, and moving. Hearthside exists for those who know the most satisfying place to be is the one that holds the people and rituals they love most.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     ASSURANCE BAR
+═══════════════════════════════════════════════ -->
+<section id="assurance">
+  <div class="w">
+    <div class="assu-grid">
+      <div class="assu-col sr"><div class="assu-ico">🌿</div><div class="assu-name">Sustainably Sourced</div><div class="assu-desc">Natural materials only — linen, oak, wool, beeswax — from certified ethical suppliers.</div></div>
+      <div class="assu-col sr d2"><div class="assu-ico">📦</div><div class="assu-name">Free Shipping Over $85</div><div class="assu-desc">Sent in compostable packaging with a handwritten note for every first order.</div></div>
+      <div class="assu-col sr d3"><div class="assu-ico">🔄</div><div class="assu-name">30-Day Returns</div><div class="assu-desc">If it doesn't feel right in your space, return it. No forms, no questions asked.</div></div>
+      <div class="assu-col sr d4"><div class="assu-ico">🏡</div><div class="assu-name">Styling Advice</div><div class="assu-desc">Free 20-minute consultations with our interior styling team, by email.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     NEWSLETTER
+═══════════════════════════════════════════════ -->
+<section id="newsletter">
+  <div class="nl-inner">
+    <p class="eyebrow sr">The Hearthside Journal</p>
+    <h2 class="nl-title sr d2">Slow ideas for<br><em>slower evenings.</em></h2>
+    <p class="nl-sub sr d3">Styling guides, seasonal rituals, new arrivals, and honest thoughts on making home the best place on earth. Once a month. Never spammy.</p>
+    <div class="nl-form sr d4">
+      <input class="nl-input" type="email" id="nl-email" placeholder="your@email.com"/>
+      <button class="nl-btn" onclick="subscribe()">Join us</button>
+    </div>
+    <p class="nl-privacy sr d5">No ads. No sharing. Unsubscribe whenever the mood changes.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════ -->
+<footer id="footer">
+  <div class="w">
+    <div class="footer-grid">
+      <div>
+        <div class="f-logo">Hearth<i>side</i></div>
+        <p class="f-copy">A curated collection of Scandinavian-inspired home objects for those who believe the most important room in the world is the one they come home to.</p>
+        <div class="f-socials">
+          <a class="f-soc" href="#" onclick="toast('📷 Opening Instagram…');return false">📷</a>
+          <a class="f-soc" href="#" onclick="toast('📌 Opening Pinterest…');return false">📌</a>
+          <a class="f-soc" href="#" onclick="toast('🎵 Opening TikTok…');return false">🎵</a>
+        </div>
+      </div>
+      <div>
+        <p class="f-col-head">Collections</p>
+        <ul class="f-links">
+          <li><a href="#" onclick="filterMood('Soft Lighting');sv('shop');return false">Soft Lighting</a></li>
+          <li><a href="#" onclick="filterMood('Cool Textures');sv('shop');return false">Cool Textures</a></li>
+          <li><a href="#" onclick="filterMood('Calm Corners');sv('shop');return false">Calm Corners</a></li>
+          <li><a href="#" onclick="filterMood('Wall Atmosphere');sv('shop');return false">Wall Atmosphere</a></li>
+          <li><a href="#" onclick="filterMood('all');sv('shop');return false">All Pieces</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="f-col-head">Support</p>
+        <ul class="f-links">
+          <li><a href="#" onclick="toast('📦 Order tracking coming soon');return false">Track Order</a></li>
+          <li><a href="#" onclick="toast('🔄 Returns portal coming soon');return false">Returns</a></li>
+          <li><a href="#" onclick="toast('💬 Opening live chat…');return false">Live Chat</a></li>
+          <li><a href="#" onclick="toast('🎁 Gift cards coming soon');return false">Gift Cards</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="f-col-head">Company</p>
+        <ul class="f-links">
+          <li><a href="#beliefs" onclick="sv('beliefs');return false">Our Story</a></li>
+          <li><a href="#" onclick="toast('🌿 Sustainability report coming soon');return false">Sustainability</a></li>
+          <li><a href="#newsletter" onclick="sv('newsletter');return false">Journal</a></li>
+          <li><a href="#" onclick="toast('💼 Careers page coming soon');return false">Careers</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="f-bott-copy">© 2025 Hearthside Home. All rights reserved.</p>
+      <div class="f-legal">
+        <a href="#" onclick="return false">Privacy</a>
+        <a href="#" onclick="return false">Terms</a>
+        <a href="#" onclick="return false">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════
+     PRODUCT MODAL
+═══════════════════════════════════════════════ -->
+<div id="modal-bg" onclick="handleBgClick(event,'modal-bg')" role="dialog" aria-modal="true">
+  <div class="modal" id="modal-box">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="modal-img" id="m-img"></div>
+    <div class="modal-info" id="m-info"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CART DRAWER
+═══════════════════════════════════════════════ -->
+<div id="cart-bg" onclick="closeCart()"></div>
+<aside id="cart-drawer" aria-label="Shopping basket">
+  <div class="cart-head">
+    <h2 class="cart-head-title">Your <em>basket</em></h2>
+    <button class="cart-x" onclick="closeCart()" aria-label="Close">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="cart-body" id="cart-body"></div>
+  <div class="cart-foot" id="cart-foot" style="display:none"></div>
+</aside>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════════
+     SHOPIFY INTEGRATION GUIDE
+     ─────────────────────────────────────────────
+     Step 1: Replace fetchProducts() with a real
+     Storefront API call:
+
+     const STORE  = 'https://YOUR-STORE.myshopify.com';
+     const TOKEN  = 'YOUR_STOREFRONT_ACCESS_TOKEN';
+     const CHECKOUT_URL = `${STORE}/cart`;
+
+     async function fetchProducts() {
+       const res = await fetch(
+         `${STORE}/api/2024-01/graphql.json`,
+         { method:'POST',
+           headers:{
+             'Content-Type':'application/json',
+             'X-Shopify-Storefront-Access-Token': TOKEN
+           },
+           body: JSON.stringify({ query: `{
+             products(first:50) { edges { node {
+               id title handle description tags
+               priceRange { minVariantPrice { amount currencyCode } }
+               images(first:1) { edges { node { url altText } } }
+               metafields(identifiers:[
+                 {namespace:"custom",key:"mood"},
+                 {namespace:"custom",key:"tagline"},
+                 {namespace:"custom",key:"badge"}
+               ]) { key value }
+             }}}
+           }` })
+         }
+       );
+       const { data } = await res.json();
+       return data.products.edges.map(({node}) => shopifyMap(node));
+     }
+
+     Step 2: Map Shopify node → UI product object:
+     function shopifyMap(node) {
+       const mf = k => node.metafields?.find(m=>m.key===k)?.value;
+       return {
+         id: node.id, title: node.title, handle: node.handle,
+         mood: mf('mood') ?? 'Calm Corners',
+         tagline: mf('tagline') ?? '',
+         badge: mf('badge') ?? null,
+         description: node.description,
+         priceRange: node.priceRange,
+         images: node.images,
+         tags: node.tags,
+         details: {}, emoji: '🏠',
+         bg: 'linear-gradient(145deg,#dce8ee,#c8d9e2)'
+       };
+     }
+
+     Step 3: Checkout — replace CHECKOUT_URL with:
+     • Simple: /cart/{variantId}:{qty}
+     • Full:   use checkoutCreate mutation → webUrl
+═══════════════════════════════════════════════ -->
+<script>
+/* ─── CONFIG ────────────────────────────────── */
+const CHECKOUT_URL = 'https://your-store.myshopify.com/cart';
+
+/* ─── MOCK DATA (Shopify Storefront API shape) ─ */
+const PRODUCTS = [
+  {
+    id:'p1',title:'Glacier Arc Floor Lamp',handle:'glacier-arc-lamp',
+    mood:'Soft Lighting',badge:'new',
+    tagline:'Cool pools of light for long, quiet evenings.',
+    description:'A graceful arc lamp with a pale blue linen shade that casts slow, silvery pools of light. Perfect for long reading nights. The weighted travertine base keeps it steady and grounded. Adjustable height. The kind of lamp that makes a room feel considered.',
+    priceRange:{minVariantPrice:{amount:'189.00'}},
+    images:{edges:[{node:{url:'',altText:'Glacier Arc Lamp'}}]},
+    tags:['lamp','lighting'],details:{Material:'Linen shade, Travertine base, Iron arm',Dimensions:'H: 160cm, Ø shade: 38cm',Bulb:'E27 max 40W (not included)',Origin:'Portugal'},
+    emoji:'🪔',bg:'linear-gradient(148deg,#123047 0%,#0d2233 60%,#07131d 100%)'
+  },
+  {
+    id:'p2',title:'Berber Hand-Woven Rug',handle:'berber-rug',
+    mood:'Cool Textures',badge:null,
+    tagline:'Woven by hand, one knot at a time, in the Atlas Mountains.',
+    description:'Made by artisan families in Morocco from 100% undyed natural wool. Each rug carries the subtle variation of human hands — no two are identical. Gets better with every passing year. The kind of textile that grounds a room and softens every footstep.',
+    priceRange:{minVariantPrice:{amount:'345.00'}},
+    images:{edges:[{node:{url:'',altText:'Berber Rug'}}]},
+    tags:['rug','wool','artisan'],details:{Material:'100% Undyed Natural Wool',Dimensions:'160 × 230 cm',Origin:'Atlas Mountains, Morocco',Care:'Spot clean or professional'},
+    emoji:'🪵',bg:'linear-gradient(148deg,#b6cbd6 0%,#8faabb 45%,#6f8da0 100%)'
+  },
+  {
+    id:'p3',title:'Nordic Soy Pillar Candle',handle:'soy-pillar',
+    mood:'Soft Lighting',badge:'sale',saleWas:'32.00',
+    tagline:'Permission to slow down, poured into wax.',
+    description:'Hand-poured from 100% natural soy wax, scented with cedarwood, bergamot, and white musk. Burns cleanly for 60+ hours. The scent is gentle — present but never loud. Light one when the day needs softening.',
+    priceRange:{minVariantPrice:{amount:'24.00'}},
+    images:{edges:[{node:{url:'',altText:'Soy Candle'}}]},
+    tags:['candle','soy','scent'],details:{Material:'100% Soy Wax, Cotton Wick',Scent:'Cedarwood, Bergamot, White Musk','Burn time':'60+ hours',Dimensions:'H: 14cm, Ø: 8cm'},
+    emoji:'🕯️',bg:'linear-gradient(148deg,#eef8fc 0%,#d5e6ee 55%,#b9d0dc 100%)'
+  },
+  {
+    id:'p4',title:'Boucle Cloud Cushion',handle:'boucle-cushion',
+    mood:'Cool Textures',badge:'new',
+    tagline:'Softer than it looks. Calmer than expected.',
+    description:'Oversized and impossibly soft, feather-filled with a looped wool-blend boucle cover. Layer two or three for that effortlessly curated, interior-magazine look that actually belongs in a real home. The kind of cushion you never quite put away.',
+    priceRange:{minVariantPrice:{amount:'68.00'}},
+    images:{edges:[{node:{url:'',altText:'Boucle Cushion'}}]},
+    tags:['cushion','boucle','wool'],details:{Material:'Boucle Wool Blend, Feather Fill',Dimensions:'60 × 60 cm',Care:'Dry clean only',Cover:'Removable zip'},
+    emoji:'☁️',bg:'linear-gradient(148deg,#e3eef3 0%,#cadbe4 55%,#aec4d0 100%)'
+  },
+  {
+    id:'p5',title:'Pressed Botanicals Frame',handle:'botanicals-frame',
+    mood:'Wall Atmosphere',badge:null,
+    tagline:'A meadow, suspended in museum glass.',
+    description:'Real pressed wildflowers and meadow grasses, preserved under anti-reflective museum glass in a slim natural oak frame. Each piece varies — the flowers are real, the arrangement unique. A quiet artwork that brings the outside in, without demanding attention.',
+    priceRange:{minVariantPrice:{amount:'95.00'}},
+    images:{edges:[{node:{url:'',altText:'Pressed Botanicals'}}]},
+    tags:['wall','art','botanical'],details:{Material:'Solid Oak, Museum Glass, Real Botanicals',Dimensions:'30 × 40 cm',Hanging:'D-ring included',Origin:'Made in Sweden'},
+    emoji:'🌿',bg:'linear-gradient(148deg,#d9ecec 0%,#bfd9d9 55%,#9fc0c2 100%)'
+  },
+  {
+    id:'p6',title:'Woven Rattan Side Table',handle:'rattan-side-table',
+    mood:'Calm Corners',badge:null,
+    tagline:'Light enough to move. Beautiful enough to stay.',
+    description:'A side table with a hand-woven rattan lower shelf and solid oak legs. Designed to sit beside a reading chair with a book and a candle on top. Natural and renewable — the kind of piece that ages gracefully, darkening very slightly as it settles into your home.',
+    priceRange:{minVariantPrice:{amount:'215.00'}},
+    images:{edges:[{node:{url:'',altText:'Rattan Table'}}]},
+    tags:['furniture','rattan','table'],details:{Material:'Hand-woven Natural Rattan, Solid Oak',Dimensions:'H: 54cm, Ø: 40cm',Weight:'3.2 kg',Assembly:'Legs attach easily'},
+    emoji:'🪑',bg:'linear-gradient(148deg,#d7e5eb 0%,#bdd1dc 55%,#9fb8c6 100%)'
+  },
+  {
+    id:'p7',title:'Stonewashed Linen Throw',handle:'linen-throw',
+    mood:'Cool Textures',badge:null,
+    tagline:'The throw that lives on the sofa, always.',
+    description:'Belgian linen stonewashed to a relaxed, softly rumpled finish that only deepens with time. Drape it over a sofa arm or fold it at the bed end. In our experience, it never quite gets put away — and that\'s exactly the point.',
+    priceRange:{minVariantPrice:{amount:'78.00'}},
+    images:{edges:[{node:{url:'',altText:'Linen Throw'}}]},
+    tags:['throw','linen','textile'],details:{Material:'100% Stonewashed Belgian Linen',Dimensions:'130 × 180 cm',Wash:'Machine wash 40°, air dry',Colour:'Mist Grey'},
+    emoji:'🧣',bg:'linear-gradient(148deg,#eaf3f6 0%,#d5e4eb 55%,#bdd0db 100%)'
+  },
+  {
+    id:'p8',title:'Concrete Taper Holder Set',handle:'concrete-holders',
+    mood:'Soft Lighting',badge:null,
+    tagline:'Architecture for your windowsill.',
+    description:'A set of three hand-cast micro-concrete taper holders, each slightly different in height. The raw, matte finish brings an honest architectural weight to any surface. Group them on a tray or cluster on a shelf. Taper candles sold separately.',
+    priceRange:{minVariantPrice:{amount:'42.00'}},
+    images:{edges:[{node:{url:'',altText:'Concrete Holders'}}]},
+    tags:['candle','concrete','holder'],details:{Material:'Hand-cast Micro-Concrete',Included:'Set of 3 holders',Heights:'6, 8, 11 cm','Ø aperture':'2.2 cm (standard tapers)'},
+    emoji:'🪨',bg:'linear-gradient(148deg,#c9d5dc 0%,#b6c4cc 55%,#9eadb7 100%)'
+  },
+  {
+    id:'p9',title:'Ash Wood Pendant Light',handle:'ash-pendant',
+    mood:'Soft Lighting',badge:'new',
+    tagline:'Light that lands softly, shadows that interest.',
+    description:'Thin ash wood slats form a lantern silhouette that casts beautiful dappled light and geometric shadows across walls and ceilings. Ideal above a dining table or in an entryway where you want light that is also an object worth looking at.',
+    priceRange:{minVariantPrice:{amount:'265.00'}},
+    images:{edges:[{node:{url:'',altText:'Ash Pendant'}}]},
+    tags:['lamp','pendant','wood'],details:{Material:'Ash Wood Slats, Brass Hardware',Dimensions:'H: 28cm, Ø: 35cm',Fitting:'E27, max 60W',Cable:'1.5m braided linen, adjustable'},
+    emoji:'💡',bg:'linear-gradient(148deg,#10283c 0%,#0b1b2a 55%,#07131d 100%)'
+  },
+  {
+    id:'p10',title:'Arched Oak Mirror',handle:'arch-mirror',
+    mood:'Wall Atmosphere',badge:null,
+    tagline:'Makes every room feel larger, lighter, more alive.',
+    description:'A full-length arch mirror in chunky solid oak. Lean it against the wall for that effortlessly considered look, or mount it. The arch shape softens the geometry of most rooms, and the oak settles naturally over the years. A lifetime piece.',
+    priceRange:{minVariantPrice:{amount:'420.00'}},
+    images:{edges:[{node:{url:'',altText:'Arch Mirror'}}]},
+    tags:['mirror','wall','oak'],details:{Material:'Solid Oiled Oak, Anti-reflective Glass',Dimensions:'60 × 160 cm',Weight:'14 kg',Mounting:'Wall fixings + floor options'},
+    emoji:'🪞',bg:'linear-gradient(148deg,#e1edf2 0%,#cbdde6 55%,#b6cbd6 100%)'
+  },
+  {
+    id:'p11',title:'Sherpa Mist Throw',handle:'sherpa-throw',
+    mood:'Calm Corners',badge:'sale',saleWas:'88.00',
+    tagline:'Both sides impossibly soft. One side wins.',
+    description:'Double-sided comfort: deeply textured sherpa fleece one side, smooth stone-washed cotton in mist grey the other. Heavy enough to feel intentional, soft enough to fall asleep under. Drape it on a reading chair, fold it at the foot of a bed, or wrap yourself in it entirely.',
+    priceRange:{minVariantPrice:{amount:'66.00'}},
+    images:{edges:[{node:{url:'',altText:'Sherpa Throw'}}]},
+    tags:['throw','sherpa','blanket'],details:{Material:'Sherpa Fleece + Stone-washed Cotton',Dimensions:'130 × 170 cm',Wash:'Machine wash gentle, tumble dry low',Weight:'1.2 kg'},
+    emoji:'🤍',bg:'linear-gradient(148deg,#f0f7fa 0%,#deebf1 55%,#c8dae3 100%)'
+  },
+  {
+    id:'p12',title:'Solid Oak Shelf Unit',handle:'oak-shelf',
+    mood:'Calm Corners',badge:null,
+    tagline:'Space for the things that tell your story.',
+    description:'A freestanding open shelf in oiled solid oak — three wide shelves for books, objects, ceramics, and plants. Generous without being imposing; honest without being raw. Built to live with for decades. The kind of piece that earns its place on day one.',
+    priceRange:{minVariantPrice:{amount:'595.00'}},
+    images:{edges:[{node:{url:'',altText:'Oak Shelf'}}]},
+    tags:['furniture','shelf','oak'],details:{Material:'Solid Oiled Oak',Dimensions:'H: 120cm, W: 80cm, D: 28cm',Weight:'22 kg',Assembly:'Requires two people, ~30 min'},
+    emoji:'📚',bg:'linear-gradient(148deg,#c3d7e0 0%,#a8bfcd 55%,#8ca7b8 100%)'
+  }
+];
+
+/* ─── STATE ─────────────────────────────────── */
+let allProds  = [];
+let activeMood = 'all';
+let searchQ    = '';
+let cart       = loadCart();
+let mQty       = 1;
+let curProd    = null;
+let wishlist   = new Set(JSON.parse(localStorage.getItem('hs_wish')||'[]'));
+
+/* ─── STORAGE ───────────────────────────────── */
+function loadCart(){try{return JSON.parse(localStorage.getItem('hs_cart')||'[]')}catch{return[]}}
+function saveCart(){localStorage.setItem('hs_cart',JSON.stringify(cart))}
+function saveWish(){localStorage.setItem('hs_wish',JSON.stringify([...wishlist]))}
+
+/* ─── SHOPIFY MOCK (replace with real API) ──── */
+async function fetchProducts(){
+  await new Promise(r=>setTimeout(r,680));
+  return PRODUCTS;
+}
+
+/* ─── INIT ──────────────────────────────────── */
+async function init(){
+  buildBand();
+  initCursor();
+  initScroll();
+  renderSkeletons();
+  allProds = await fetchProducts();
+  buildFilters();
+  renderProducts();
+  updateBadge();
+}
+
+/* ─── IDENTITY BAND ─────────────────────────── */
+function buildBand(){
+  const words=['Free Shipping Over $85','Sustainably Sourced','Handcrafted in Small Batches','30-Day Returns','Scandinavian Calm','No Compromises on Quality','New Autumn Collection'];
+  const d=[...words,...words];
+  document.getElementById('id-track').innerHTML=d.map(w=>`<span class="id-item"><span class="id-gem"></span>${w}</span>`).join('');
+}
+
+/* ─── CURSOR ────────────────────────────────── */
+function initCursor(){
+  const dot=document.getElementById('c-dot'),ring=document.getElementById('c-ring');
+  let rx=0,ry=0,ax=0,ay=0,raf;
+  function loop(){
+    rx+=(ax-rx)*.11; ry+=(ay-ry)*.11;
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    raf=requestAnimationFrame(loop);
+  }
+  document.addEventListener('mousemove',e=>{
+    ax=e.clientX;ay=e.clientY;
+    dot.style.left=ax+'px';dot.style.top=ay+'px';
+    if(!raf)loop();
+  });
+  document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,[onclick],[tabindex]'))document.body.classList.add('hov')});
+  document.addEventListener('mouseout', e=>{if(e.target.closest('a,button,[onclick],[tabindex]'))document.body.classList.remove('hov')});
+  document.addEventListener('mousedown',()=>document.body.classList.add('click'));
+  document.addEventListener('mouseup',  ()=>document.body.classList.remove('click'));
+}
+
+/* ─── SCROLL EFFECTS ────────────────────────── */
+function initScroll(){
+  window.addEventListener('scroll',()=>{
+    document.getElementById('nav').classList.toggle('scrolled',scrollY>60);
+  },{passive:true});
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+  },{threshold:.1,rootMargin:'0px 0px -36px 0px'});
+  document.querySelectorAll('.sr').forEach(el=>io.observe(el));
+  new MutationObserver(()=>{
+    document.querySelectorAll('.sr:not(.in)').forEach(el=>io.observe(el));
+  }).observe(document.getElementById('pgrid'),{childList:true});
+}
+
+/* ─── SMOOTH SCROLL ─────────────────────────── */
+function sv(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});return false}
+
+/* ─── FILTER BAR ────────────────────────────── */
+function buildFilters(){
+  const moods=['all',...new Set(allProds.map(p=>p.mood))];
+  document.getElementById('filter-bar').innerHTML=moods.map(m=>
+    `<button class="f-tab${m===activeMood?' on':''}" onclick="filterMood('${m}')">${m==='all'?'All Pieces':m}</button>`
+  ).join('');
+}
+
+function filterMood(mood){
+  activeMood=mood;
+  document.querySelectorAll('.f-tab').forEach(b=>{
+    const lbl=b.textContent.trim();
+    b.classList.toggle('on',(mood==='all'&&lbl==='All Pieces')||lbl===mood);
+  });
+  const ey=document.getElementById('shop-eyebrow');
+  if(ey)ey.textContent=mood==='all'?'All Pieces':mood;
+  renderProducts();
+}
+
+/* ─── SEARCH ────────────────────────────────── */
+function handleSearch(v){
+  searchQ=v.trim();
+  document.getElementById('search-x').classList.toggle('show',v.length>0);
+  renderProducts();
+}
+function clearSearch(){
+  document.getElementById('search-in').value='';
+  searchQ='';
+  document.getElementById('search-x').classList.remove('show');
+  renderProducts();
+}
+function focusSearch(){sv('shop');setTimeout(()=>document.getElementById('search-in').focus(),600)}
+
+/* ─── FILTER LOGIC ──────────────────────────── */
+function filtered(){
+  const q=searchQ.toLowerCase();
+  return allProds.filter(p=>{
+    const mOk=activeMood==='all'||p.mood===activeMood;
+    const qOk=!q||[p.title,p.description,...p.tags,p.mood].some(s=>s.toLowerCase().includes(q));
+    return mOk&&qOk;
+  });
+}
+
+/* ─── RENDER PRODUCTS ───────────────────────── */
+function renderSkeletons(){
+  document.getElementById('pgrid').innerHTML=Array(6).fill(0).map(()=>`
+    <div class="skel">
+      <div class="skel-blk" style="height:230px"></div>
+      <div style="padding:20px">
+        <div class="skel-blk" style="height:10px;width:40%;margin-bottom:12px;border-radius:4px"></div>
+        <div class="skel-blk" style="height:17px;width:78%;margin-bottom:10px;border-radius:4px"></div>
+        <div class="skel-blk" style="height:10px;width:60%;margin-bottom:22px;border-radius:4px"></div>
+        <div class="skel-blk" style="height:20px;width:33%;border-radius:4px"></div>
+      </div>
+    </div>`).join('');
+}
+
+function renderProducts(){
+  const prods=filtered();
+  const grid=document.getElementById('pgrid');
+  if(!prods.length){
+    grid.innerHTML=`<div class="empty"><div class="empty-icon">🌿</div><h3>Nothing found here</h3><p>Try a different mood or clear your search to see everything.</p><button class="empty-btn" onclick="clearSearch();filterMood('all')">Show all pieces →</button></div>`;
+    return;
+  }
+  grid.innerHTML=prods.map((p,i)=>cardHTML(p,i)).join('');
+}
+
+function cardHTML(p,i){
+  const price=parseFloat(p.priceRange.minVariantPrice.amount);
+  const imgUrl=p.images?.edges?.[0]?.node?.url;
+  const wished=wishlist.has(p.id);
+  const img=imgUrl
+    ?`<img src="${imgUrl}" alt="${p.title}" loading="lazy" style="width:100%;height:100%;object-fit:cover"/>`
+    :`<div class="pc-placeholder" style="background:${p.bg}">${p.emoji}</div>`;
+  const badge=p.badge?`<span class="pc-badge ${p.badge}">${p.badge==='new'?'New In':'On Sale'}</span>`:'';
+  const priceHtml=p.saleWas?`<span class="was">$${p.saleWas}</span>$${price.toFixed(2)}`:`$${price.toFixed(2)}`;
+  return `
+  <article class="pc sr up" style="transition-delay:${i*.07}s" role="listitem"
+           onclick="openModal('${p.id}')" tabindex="0"
+           onkeydown="if(event.key==='Enter')openModal('${p.id}')">
+    <div class="pc-img-wrap">
+      <div class="pc-img-inner">${img}</div>
+      ${badge}
+      <button class="pc-wish${wished?' active':''}"
+              onclick="event.stopPropagation();toggleWish('${p.id}',this)"
+              aria-label="Wishlist">
+        <svg width="13" height="13" fill="${wished?'var(--clay)':'none'}" stroke="var(--clay)" stroke-width="1.8" viewBox="0 0 24 24">
+          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+        </svg>
+      </button>
+      <div class="pc-overlay">
+        <button class="pc-discover" onclick="event.stopPropagation();openModal('${p.id}')">Discover this piece</button>
+      </div>
+    </div>
+    <div class="pc-info">
+      <p class="pc-mood">${p.mood}</p>
+      <h3 class="pc-name">${p.title}</h3>
+      <p class="pc-tagline">${p.tagline}</p>
+      <div class="pc-foot">
+        <div class="pc-price">${priceHtml}</div>
+        <button class="pc-add" onclick="event.stopPropagation();addToCart('${p.id}',this)"
+                aria-label="Add to basket">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+    </div>
+  </article>`;
+}
+
+/* ─── WISHLIST ───────────────────────────────── */
+function toggleWish(id,btn){
+  const fill=btn.querySelector('path');
+  if(wishlist.has(id)){
+    wishlist.delete(id);btn.classList.remove('active');
+    fill.setAttribute('fill','none');
+  } else {
+    wishlist.add(id);btn.classList.add('active');
+    fill.setAttribute('fill','var(--clay)');
+    toast('🤍 Saved to your wishlist');
+  }
+  saveWish();
+}
+
+/* ─── MODAL ──────────────────────────────────── */
+function openModal(id){
+  const p=allProds.find(x=>x.id===id);if(!p)return;
+  curProd=p;mQty=1;
+  const price=parseFloat(p.priceRange.minVariantPrice.amount);
+  const imgUrl=p.images?.edges?.[0]?.node?.url;
+  document.getElementById('m-img').innerHTML=imgUrl
+    ?`<img src="${imgUrl}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;border-radius:var(--r4) 0 0 var(--r4)"/>`
+    :`<div class="modal-scene" style="background:${p.bg}">${p.emoji}</div>`;
+  const priceHtml=p.saleWas
+    ?`<span class="m-was">$${p.saleWas}</span><span class="m-price">$${price.toFixed(2)}</span>`
+    :`<span class="m-price">$${price.toFixed(2)}</span>`;
+  const attrs=Object.entries(p.details||{}).map(([k,v])=>`<div class="m-attr"><span class="m-ak">${k}</span><span class="m-av">${v}</span></div>`).join('');
+  document.getElementById('m-info').innerHTML=`
+    <p class="m-mood">${p.mood}</p>
+    <h2 class="m-name">${p.title}</h2>
+    <p class="m-tagline">${p.tagline}</p>
+    <div class="m-price-row">${priceHtml}</div>
+    <div class="m-rule"></div>
+    <p class="m-desc">${p.description}</p>
+    <div class="m-attrs">${attrs}</div>
+    <div class="m-qty-row">
+      <div class="qty-ctrl">
+        <button class="qty-b" onclick="changeQty(-1)">−</button>
+        <span class="qty-v" id="m-qty">1</span>
+        <button class="qty-b" onclick="changeQty(1)">+</button>
+      </div>
+      <button class="m-add" onclick="addFromModal()">Add to Basket</button>
+    </div>
+    <div class="m-assure">
+      <span class="m-assure-item">🌿 Sustainably sourced</span>
+      <span class="m-assure-item">📦 Free over $85</span>
+      <span class="m-assure-item">🔄 30-day returns</span>
+    </div>`;
+  document.getElementById('modal-bg').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function changeQty(d){mQty=Math.max(1,mQty+d);document.getElementById('m-qty').textContent=mQty}
+function addFromModal(){addById(curProd.id,mQty);closeModal();setTimeout(openCart,280)}
+function closeModal(){document.getElementById('modal-bg').classList.remove('open');document.body.style.overflow=''}
+function handleBgClick(e,id){if(e.target.id===id)closeModal()}
+
+/* ─── CART ───────────────────────────────────── */
+function addToCart(id,btn){
+  addById(id,1);
+  btn.classList.add('pop');
+  setTimeout(()=>btn.classList.remove('pop'),500);
+  const p=allProds.find(x=>x.id===id);
+  toast(`✓  ${p?.title??'Item'} — added to your basket`);
+}
+function addById(id,qty=1){
+  const ex=cart.find(i=>i.id===id);
+  ex?ex.qty+=qty:cart.push({id,qty});
+  saveCart();updateBadge();
+}
+function removeItem(id){cart=cart.filter(i=>i.id!==id);saveCart();updateBadge();renderCart()}
+function changeCartQty(id,d){
+  const it=cart.find(i=>i.id===id);if(!it)return;
+  it.qty=Math.max(1,it.qty+d);
+  saveCart();updateBadge();renderCart();
+}
+function updateBadge(){document.getElementById('cart-n').textContent=cart.reduce((s,i)=>s+i.qty,0)}
+function openCart(){renderCart();document.getElementById('cart-drawer').classList.add('open');document.getElementById('cart-bg').classList.add('open');document.body.style.overflow='hidden'}
+function closeCart(){document.getElementById('cart-drawer').classList.remove('open');document.getElementById('cart-bg').classList.remove('open');document.body.style.overflow=''}
+
+function renderCart(){
+  const body=document.getElementById('cart-body');
+  const foot=document.getElementById('cart-foot');
+  if(!cart.length){
+    body.innerHTML=`<div class="cart-empty"><div class="cart-empty-icon">🧺</div><p>Your basket is quiet for now.<br>Let's find something beautiful.</p><button class="cart-empty-cta" onclick="closeCart();sv('shop')">Explore the collection</button></div>`;
+    foot.style.display='none';return;
+  }
+  body.innerHTML=cart.map(item=>{
+    const p=allProds.find(x=>x.id===item.id);if(!p)return'';
+    const price=parseFloat(p.priceRange.minVariantPrice.amount);
+    return `<div class="cart-item">
+      <div class="cart-thumb" style="background:${p.bg}">${p.emoji}</div>
+      <div class="cart-info">
+        <div class="cart-mood">${p.mood}</div>
+        <div class="cart-name">${p.title}</div>
+        <div class="cart-price">$${(price*item.qty).toFixed(2)}</div>
+      </div>
+      <div class="cart-ctrl-col">
+        <div class="ci-qty">
+          <button class="ciq-b" onclick="changeCartQty('${p.id}',-1)">−</button>
+          <span class="ciq-v">${item.qty}</span>
+          <button class="ciq-b" onclick="changeCartQty('${p.id}',1)">+</button>
+        </div>
+        <button class="ci-rm" onclick="removeItem('${p.id}')" aria-label="Remove">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+  const sub=cart.reduce((s,item)=>{
+    const p=allProds.find(x=>x.id===item.id);
+    return s+(p?parseFloat(p.priceRange.minVariantPrice.amount)*item.qty:0);
+  },0);
+  foot.style.display='block';
+  /* ── TO CONNECT SHOPIFY CHECKOUT:
+     Replace href below with real Shopify cart URL or checkoutCreate webUrl
+  ── */
+  foot.innerHTML=`
+    <div class="cf-row"><span class="cf-label">Subtotal</span><span class="cf-val">$${sub.toFixed(2)}</span></div>
+    <p class="cf-note">Taxes & shipping calculated at checkout.</p>
+    <a class="btn-checkout" href="${CHECKOUT_URL}" target="_blank" rel="noopener"
+       onclick="toast('🛍️ Heading to checkout…')">
+      Continue to Checkout
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <button class="btn-continue" onclick="closeCart()">← Keep browsing</button>`;
+}
+
+/* ─── NEWSLETTER ─────────────────────────────── */
+function subscribe(){
+  const email=document.getElementById('nl-email').value.trim();
+  if(!email||!email.includes('@')){toast('Please enter a valid email address');return}
+  document.getElementById('nl-email').value='';
+  toast('🌿 Welcome to the Hearthside Journal.');
+}
+
+/* ─── TOAST ──────────────────────────────────── */
+let toastTmr;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(toastTmr);
+  toastTmr=setTimeout(()=>el.classList.remove('show'),3200);
+}
+
+/* ─── KEYBOARD ───────────────────────────────── */
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeCart()}});
+
+/* ─── BOOT ───────────────────────────────────── */
+init();
+</script>
+</body>
+</html>
