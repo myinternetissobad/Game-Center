@@ -5,7 +5,21 @@ function board(words){const b=new Map;words.forEach((w,id)=>cells(w).forEach(p=>
 function components(words){const parents=words.map((_,i)=>i);function find(x){return parents[x]===x?x:parents[x]=find(parents[x])}for(const p of board(words).values())for(const i of p.ids)parents[find(i)]=find(p.ids[0]);return words.map((_,i)=>find(i))}
 function validate(words,word,dictionary){const fail=reason=>({valid:false,reason});if(!/^[A-Z]{2,15}$/.test(word.text))return fail('Use 2–15 letters, with no spaces.');if(!dictionary.has(word.text))return fail('This word is not in our word list. Try another.');if(words.some(w=>w.text===word.text))return fail('That word is already on the board.');if(!['h','v'].includes(word.dir)||!Number.isInteger(word.r)||!Number.isInteger(word.c))return fail('Choose a starting square and direction.');const path=cells(word);if(path.some(p=>p.r<0||p.r>14||p.c<0||p.c>14))return fail('This word does not fit on the board.');const b=board(words),crossed=new Set;let added=0;for(const p of path){const old=b.get(p.r*15+p.c);if(old){if(old.letter!==p.letter)return fail('The crossing letters do not match.');for(const id of old.ids){if(words[id].dir===word.dir)return fail('Words must cross, not overlap along a row or column.');crossed.add(id)}}else{added++;const neighbors=word.dir==='h'?[[p.r-1,p.c],[p.r+1,p.c]]:[[p.r,p.c-1],[p.r,p.c+1]];if(neighbors.some(([r,c])=>r>=0&&r<15&&c>=0&&c<15&&b.has(r*15+c)))return fail('Leave a square beside your word to avoid accidental words.')}}
 const before={r:word.r-(word.dir==='v'?1:0),c:word.c-(word.dir==='h'?1:0)},last=path.at(-1),after={r:last.r+(word.dir==='v'?1:0),c:last.c+(word.dir==='h'?1:0)};if([before,after].some(p=>p.r>=0&&p.r<15&&p.c>=0&&p.c<15&&b.has(p.r*15+p.c)))return fail('Leave a blank square at each end of your word.');if(!added)return fail('Add at least one new letter.');const comps=components(words),ids=[...crossed];const winning=ids.length===2&&comps[ids[0]]!==comps[ids[1]];if(ids.length!==1&&!winning)return fail('Cross exactly one word, or join both chains with your final word.');return{valid:true,winning,cost:10+word.text.length,reason:winning?'The final link! Connect both chains.':`Valid link · +${10+word.text.length} points`}}
-function puzzle(index){const a=['BLOOM','GLOOM','BROOM'],z=['STONE','SHORE','SHINE'];let words=[{text:a[index%3],r:2,c:2,dir:'h',seed:true},{text:z[Math.floor(index/3)%3],r:10,c:4,dir:'h',seed:true}];let solution=[{text:'OCEAN',r:2,c:4,dir:'v'},{text:'NORTH',r:6,c:4,dir:'h'},{text:'HOUSE',r:6,c:8,dir:'v'}];const mode=Math.floor(index/9)%8;// Four placements and their transposes keep every word readable and preserve a proven route.
-const offsetR=(mode%4===1?1:mode%4===2?-1:0),offsetC=(mode%4===3?2:0);function shift(w){let r=w.r+offsetR,c=w.c+offsetC,dir=w.dir;if(mode>=4){[r,c]=[c,r];dir=dir==='h'?'v':'h'}return{...w,r,c,dir}}return{seeds:words.map(shift),solution:solution.map(shift)}}
+function puzzle(index){
+ // The route is fixed and verified; the pair of starting words changes daily.
+ // The seeds sit on opposite edges so the objective is immediately readable.
+ const pairs=[
+  ['BLOOM','TIGER','NIGHTFALL','LIGHT'],
+  ['GLOOM','MANGO','NORTHWARD','DREAM'],
+  ['BROOM','MANGO','NORTHWARD','DREAM'],
+  ['BLOOM','MIGHT','NORTHWARD','DREAM'],
+  ['GLOOM','TIGER','NIGHTFALL','LIGHT'],
+  ['BROOM','METAL','NORTHWARD','DREAM']
+ ];
+ const [left,right,middle,finalWord]=pairs[Math.abs(index)%pairs.length];
+ const seeds=[{text:left,r:2,c:0,dir:'h',seed:true},{text:right,r:10,c:10,dir:'h',seed:true}];
+ const solution=[{text:'OCEAN',r:2,c:2,dir:'v'},{text:middle,r:6,c:2,dir:'h'},{text:finalWord,r:6,c:10,dir:'v'}];
+ return {seeds,solution};
+}
 const api={cells,board,components,validate,puzzle};root.WordLinks=api;if(typeof module!=='undefined')module.exports=api;
 })(globalThis);
