@@ -1,1 +1,0 @@
-Word Links uses the public-domain Webster’s Second International word list, distributed with BSD/macOS. Proper nouns, punctuation and words longer than 15 letters are excluded. Historical and uncommon words may be included; some modern words and inflections may be absent.
